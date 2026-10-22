@@ -144,7 +144,15 @@ body[data-state=married] .pg-end .corner.light{color:#B8933F}
 .blossom.l{left:-12%;top:-8%}.blossom.r{right:-14%;bottom:-10%}
 .pg-cover .art{position:absolute;right:-2%;bottom:0;height:min(72vh,640px);aspect-ratio:3/4;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 60%,#000 40%,transparent 75%);mask-image:radial-gradient(ellipse 70% 80% at 50% 60%,#000 40%,transparent 75%);opacity:.95}
 .pg-cover .art img{height:100%;width:100%;object-fit:cover;display:block}
-@media (max-width:760px){.pg-cover .art{height:46vh;right:-10%;opacity:.6}}
+@media (max-width:760px){
+  .pg-cover .content{justify-content:flex-start;padding-top:max(7vh,40px);padding-bottom:0}
+  .pg-cover .art{height:36vh;right:50%;transform:translateX(50%);bottom:0;opacity:.95;-webkit-mask-image:radial-gradient(ellipse 62% 78% at 50% 100%,#000 50%,rgba(0,0,0,.5) 75%,transparent 100%);mask-image:radial-gradient(ellipse 62% 78% at 50% 100%,#000 50%,rgba(0,0,0,.5) 75%,transparent 100%)}
+  .pg-cover .art.px{transform:translateX(50%) translate(calc(var(--tx) * 10px),calc(var(--ty) * 10px))}
+  .pg-cover .cover-mono{width:88px;margin-bottom:.6rem}
+  .pg-cover .scrollhint{bottom:2vh;padding:.45rem .9rem;border-radius:999px;background:rgba(255,251,247,.7);backdrop-filter:blur(6px);color:#6B3F4C}
+  .page .corner{width:38vw}.page .corner.br{bottom:-1%;right:-8%}.page .corner.tl{top:0;left:-8%}
+}
+@media (max-width:760px) and (max-height:700px){.pg-cover .art{height:28vh}.pg-cover .content{padding-top:5vh}}
 .cameo{width:clamp(110px,22vw,160px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 1px var(--gold),0 24px 50px -24px rgba(74,46,54,.5);margin:1rem auto 0}
 .cameo img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;transform:scale(1.35);display:block}
 .cover-mono{width:clamp(104px,16vw,150px);margin-bottom:1.1rem;filter:drop-shadow(0 6px 14px rgba(142,107,58,.25))}
@@ -188,9 +196,10 @@ body[data-state=married] .confetti{opacity:1}
 .page.active .kolam .kl *{stroke-dashoffset:0}
 .couple{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(.8rem,3vw,2rem);align-items:start;width:100%;margin-top:1.2rem}
 .pg-couple .content{max-width:940px}
-.knotmark{align-self:center;display:grid;place-items:center;position:relative}
+.knotmark{align-self:center;display:grid;place-items:center;position:relative;isolation:isolate}
 .knotmark .mono{width:clamp(84px,11vw,120px);filter:drop-shadow(0 8px 18px rgba(142,107,58,.22))}
-.knotmark::before{content:'';position:absolute;width:150%;height:150%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.7),rgba(255,255,255,0) 70%)}
+.knotmark::before{content:'';position:absolute;width:130%;height:130%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(255,255,255,0) 70%);z-index:-1}
+.person{position:relative;z-index:1}
 @media (max-width:560px){.knotmark .mono{width:84px}}
 .person{text-align:center}
 .pname{font-family:var(--display);font-style:italic;font-size:clamp(1.4rem,4.6vw,2.4rem);line-height:1.15;color:#6B3F4C}
