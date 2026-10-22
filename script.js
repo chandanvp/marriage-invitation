@@ -15,12 +15,31 @@ if (guest) {
   $('#dear').innerHTML = '';
   const l1 = document.createElement('span'); l1.className = 'dear-line'; l1.textContent = 'Dear';
   const nm = document.createElement('span'); nm.className = 'guest'; nm.textContent = guest;
+  const rl = document.createElement('span'); rl.className = 'guest-rule';
   const l2 = document.createElement('span'); l2.className = 'dear-line'; l2.textContent = 'you are warmly invited to the wedding of';
-  $('#dear').append(l1, nm, l2);
+  $('#dear').append(l1, nm, rl, l2);
   $('#endguest').textContent = `Dear ${guest},`; $('#endguest').hidden = false;
 }
 
 /* ---------- scenery generators ---------- */
+const SVGNS = 'http://www.w3.org/2000/svg';
+function handwrite(host, text, { size = 40, stagger = .07, start = 0 } = {}) {
+  const svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('class', 'handwrite ' + (host.className || '')); svg.setAttribute('aria-label', text); svg.setAttribute('role', 'img');
+  const t = document.createElementNS(SVGNS, 'text'); t.setAttribute('x', '50%'); t.setAttribute('y', size * .78); t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', size);
+  [...text].forEach((ch, i) => { const sp = document.createElementNS(SVGNS, 'tspan'); sp.textContent = ch; sp.style.setProperty('--dl', (start + i * stagger).toFixed(2) + 's'); t.appendChild(sp); });
+  svg.appendChild(t); svg.setAttribute('height', size * 1.15); svg.setAttribute('width', '100%');
+  if (host.id) svg.id = host.id;
+  host.replaceWith(svg);
+  // fit: shrink font if the text is wider than the host
+  const fit = () => { try { const w = t.getComputedTextLength(), W = svg.clientWidth || svg.getBoundingClientRect().width; if (w > W * .96 && W) { const k = W * .96 / w; t.setAttribute('font-size', size * k); t.setAttribute('y', size * k * .78); svg.setAttribute('height', size * k * 1.15); } } catch (e) { } };
+  (document.fonts ? document.fonts.load(`${size}px "Great Vibes"`).then(fit, fit) : Promise.resolve().then(fit));
+  return svg;
+}
+function writeNames(text) {
+  const envSize = Math.min(44, Math.max(26, innerWidth * .07));
+  handwrite($('#envguest'), text, { size: envSize, stagger: .06, start: .9 });
+}
+if (guest) writeNames(guest); else writeNames('our dearest family & friends');
 function petals(el, n) { if (!el) return; for (let i = 0; i < n; i++) { const p = document.createElement('i'); p.className = 'petal'; p.style.cssText = `left:${rnd(0, 100)}%;--t:${rnd(10, 18)}s;--dl:${rnd(-18, 0)}s;--sw:${rnd(-60, 60)}px;transform:scale(${rnd(.6, 1.2)})`; el.appendChild(p); } }
 function stars(el, n, max) { if (!el) return; for (let i = 0; i < n; i++) { const s = document.createElement('i'); s.className = 'star'; const z = rnd(1, max); s.style.cssText = `left:${rnd(0, 100)}%;top:${rnd(0, 100)}%;width:${z}px;height:${z}px;--t:${rnd(2, 5)}s;--dl:${rnd(0, 4)}s`; el.appendChild(s); } }
 function confetti(el) { if (!el) return; for (let i = 0; i < 40; i++) { const c = document.createElement('i'); c.className = 'confetti'; c.style.cssText = `left:${rnd(0, 100)}%;background:${['#F6C9D0', '#E9CF8E', '#CFE3F4', '#D9EBD9', '#C9A05A'][i % 5]};--t:${rnd(5, 9)}s;--dl:${rnd(-9, 0)}s;border-radius:${i % 3 ? 2 : 50}%`; el.appendChild(c); } }
@@ -52,7 +71,7 @@ function openEnvelope() {
   const t = reduced ? 0 : 1;
   setTimeout(() => env.classList.add('open'), 250 * t);
   setTimeout(() => env.classList.add('fly'), 1700 * t);
-  setTimeout(() => { document.body.classList.add('open'); document.body.classList.remove('sealed'); scroller.removeAttribute('inert'); scroller.focus({ preventScroll: true }); placeFirefly(0); }, 2000 * t);
+  setTimeout(() => { document.body.classList.add('open'); document.body.classList.remove('sealed'); scroller.removeAttribute('inert'); scroller.focus({ preventScroll: true }); placeFirefly(0); coverWrite(); }, 2000 * t);
   setTimeout(() => $('#envelope').remove(), 4200 * t);
 }
 seal.addEventListener('click', openEnvelope);
@@ -62,7 +81,7 @@ if (qs.get('open') === '1') {
   opened = true; document.body.classList.add('open'); document.body.classList.remove('sealed'); scroller.removeAttribute('inert'); $('#envelope').remove();
   const p = Math.min(N - 1, Math.max(0, parseInt(qs.get('p') || '0', 10) || 0));
   if (p) { scroller.style.scrollBehavior = 'auto'; pages[p].scrollIntoView(); setTimeout(() => scroller.style.scrollBehavior = '', 50); }
-  setTimeout(() => placeFirefly(p), 50);
+  setTimeout(() => placeFirefly(p), 50); coverWrite();
 }
 if (qs.get('demo') === 'open') setTimeout(openEnvelope, 1200);
 
@@ -84,6 +103,7 @@ const io = new IntersectionObserver(es => {
     garland.style.setProperty('--navcol', getComputedStyle(e.target).color);
     if (document.body.classList.contains('open')) placeFirefly(i);
     if (e.target.classList.contains('pg-venue')) loadMap();
+    if (e.target.classList.contains('pg-travel')) loadSpotify();
   });
 }, { root: scroller, threshold: .5 });
 pages.forEach(p => io.observe(p));
@@ -156,6 +176,9 @@ window.addEventListener('keydown', e => { if (e.key === 'Escape') pop.classList.
 /* ---------- map (lazy) ---------- */
 let mapLoaded = false;
 function loadMap() { if (mapLoaded) return; mapLoaded = true; const f = $('#gmap'); f.src = f.dataset.src; }
+let spotifyLoaded = false;
+function loadSpotify() { if (spotifyLoaded) return; spotifyLoaded = true; const f = $('#spotify'); if (f) f.src = f.dataset.src; }
+function coverWrite() { if (coverWrite.done) return; coverWrite.done = true; const g = $('.dear .guest'); if (g) handwrite(g, guest, { size: Math.min(60, Math.max(34, innerWidth * .095)), stagger: .07, start: .4 }); }
 
 /* ---------- share ---------- */
 $('#share').onclick = async () => {
@@ -163,4 +186,78 @@ $('#share').onclick = async () => {
   if (navigator.share) { try { await navigator.share(data); } catch (e) { } }
   else { try { await navigator.clipboard.writeText(url); $('#share').textContent = 'Link copied'; setTimeout(() => $('#share').textContent = 'Share invite', 1800); } catch (e) { } }
 };
+
+/* ---------- living paintings: animated light layers over each illustration ---------- */
+(function living() {
+  // positions are % of the 3:2 frame, matched to the artwork
+  const SCENES = {
+    reception: { bulbs: [[36, 30], [41, 38], [46, 33], [50, 22], [55, 32], [60, 37], [66, 31], [71, 25], [33, 24], [68, 20]], lamps: [[9, 48], [12, 53], [16, 48], [67, 50], [74, 49]], stars: 18, petals: 7, sheen: true },
+    muhurtam: { flames: [[21, 60], [33, 56], [74, 58], [82, 62]], sun: [50, 40], rays: [50, 40], petals: 8, sheen: true },
+    lunch: { bulbs: [[36, 30], [41, 36], [46, 32], [52, 24], [56, 31], [61, 36], [66, 30], [70, 25]], lamps: [[9, 46], [12, 51], [16, 46]], sun: [78, 8], sparkles: 6, petals: 8, sheen: true },
+    venue: { sun: [12, 16], birds: 2, petals: 5, sheen: true }
+  };
+  $$('.hero.living').forEach(h => {
+    const sc = SCENES[h.dataset.living]; if (!sc) return;
+    const layer = document.createElement('div'); layer.className = 'fxlayer'; const fx = document.createElement('div'); fx.className = 'fx'; layer.appendChild(fx); h.appendChild(layer);
+    const add = (cls, x, y, css = '') => { const e = document.createElement('i'); e.className = cls; e.style.cssText = `left:${x}%;top:${y}%;${css}`; fx.appendChild(e); return e; };
+    if (sc.rays) add('ray', 0, 0, `--cx:${sc.rays[0]}%;--cy:${sc.rays[1]}%`);
+    if (sc.sun) add('sunglow', sc.sun[0], sc.sun[1]);
+    (sc.stars ? [...Array(sc.stars)] : []).forEach(() => { const z = rnd(1, 2.2); add('star', rnd(2, 98), rnd(2, 26), `width:${z}px;height:${z}px;--t:${rnd(2, 5)}s;--dl:${rnd(0, 4)}s;position:absolute`); });
+    (sc.lamps || []).forEach(([x, y], i) => add('lamp', x, y, `--t:${rnd(2.6, 3.8)}s;--dl:${-i * .7}s`));
+    (sc.bulbs || []).forEach(([x, y], i) => add('bulb', x, y, `--t:${rnd(2, 3.4)}s;--dl:${-i * .43}s`));
+    (sc.flames || []).forEach(([x, y], i) => add('flame', x, y, `--dl:${-i * .35}s`));
+    [...Array(sc.sparkles || 0)].forEach(() => add('sparkle', rnd(10, 90), rnd(15, 75), `--dl:${rnd(0, 5)}s`));
+    [...Array(sc.petals || 0)].forEach(() => { const p = add('petal', rnd(0, 100), -8, `--t:${rnd(9, 15)}s;--dl:${rnd(-15, 0)}s;--sw:${rnd(-40, 40)}px;transform:scale(${rnd(.5, .9)})`); p.style.position = 'absolute'; });
+    [...Array(sc.birds || 0)].forEach((_, i) => { const b = document.createElementNS(SVGNS, 'svg'); b.setAttribute('class', 'bird'); b.setAttribute('viewBox', '0 0 26 10'); b.style.cssText = `--dl:${-i * 11}s;top:${14 + i * 9}%;left:-6%;width:${14 - i * 3}px;position:absolute`; b.innerHTML = '<path d="M1 6 q6 -7 12 0 q6 -7 12 0" fill="none" stroke="#8A5F3C" stroke-width="1.2" stroke-linecap="round"/>'; fx.appendChild(b); });
+    if (sc.sheen) add('sheen', 0, 0);
+  });
+})();
+
+/* ---------- save my invite: keepsake card (1080×1920) with the guest's name + QR ---------- */
+(function keepsake() {
+  const btn = $('#savecard'); if (!btn) return;
+  const MY_URL = SITE + (guest ? '?to=' + encodeURIComponent(guest).replace(/%20/g, '+') : '');
+  const loadQR = () => new Promise((res, rej) => { if (window.qrcode) return res(); const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  const loadImg = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+  const BRANCH = 'M4 110 C 50 90 110 70 196 40 M40 96 q 10 -24 24 -16 q -10 12 -24 16 M70 86 q 4 18 20 16 q -6 -12 -20 -16 M100 74 q 10 -24 24 -16 q -10 12 -24 16 M130 64 q 4 18 20 16 q -6 -12 -20 -16 M160 52 q 10 -22 24 -14 q -10 12 -24 14';
+  function branch(ctx, x, y, rot, flip, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(flip ? -s : s, s); ctx.strokeStyle = '#B8933F'; ctx.lineWidth = 1.6; ctx.lineCap = 'round'; ctx.stroke(new Path2D(BRANCH)); ctx.fillStyle = '#B8933F'; [[58, 78, 1], [118, 58, .8], [176, 40, .65]].forEach(([bx, by, k]) => { for (let a = 0; a < 4; a++) { ctx.beginPath(); ctx.ellipse(bx + Math.cos(a * Math.PI / 2) * 7 * k, by + Math.sin(a * Math.PI / 2) * 7 * k, 5 * k, 2.6 * k, a * Math.PI / 2, 0, 7); ctx.fill(); } }); ctx.restore(); }
+  async function build() {
+    const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+    if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '70px "Great Vibes"', '300 40px "Cormorant Garamond"', '300 30px Jost'].map(f => document.fonts.load(f).catch(() => { })));
+    const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#EBC4C2'); g.addColorStop(.5, '#F6E3E3'); g.addColorStop(1, '#FFF6F3'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    const rg = c.createRadialGradient(W / 2, 520, 50, W / 2, 520, 600); rg.addColorStop(0, 'rgba(255,255,255,.7)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
+    // couple illustration, faded in at the bottom
+    try { const im = await loadImg('artwork/couple.jpg'); const ih = 760, iw = ih * im.width / im.height; c.save(); c.globalAlpha = .95; c.drawImage(im, (W - iw) / 2, H - ih - 170, iw, ih); c.restore(); const fg = c.createLinearGradient(0, H - ih - 170, 0, H - ih + 160); fg.addColorStop(0, 'rgba(246,227,227,1)'); fg.addColorStop(1, 'rgba(246,227,227,0)'); c.fillStyle = fg; c.fillRect(0, H - ih - 180, W, 340); const sg = c.createLinearGradient((W - iw) / 2 - 10, 0, (W - iw) / 2 + 140, 0); sg.addColorStop(0, 'rgba(248,232,232,1)'); sg.addColorStop(1, 'rgba(248,232,232,0)'); c.fillStyle = sg; c.fillRect(0, H - ih - 170, (W - iw) / 2 + 140, ih); const sg2 = c.createLinearGradient((W + iw) / 2 + 10, 0, (W + iw) / 2 - 140, 0); sg2.addColorStop(0, 'rgba(250,236,236,1)'); sg2.addColorStop(1, 'rgba(250,236,236,0)'); c.fillStyle = sg2; c.fillRect((W + iw) / 2 - 140, H - ih - 170, W, ih); } catch (e) { }
+    // gold frame + botanical corners
+    c.strokeStyle = 'rgba(184,147,63,.55)'; c.lineWidth = 2; c.strokeRect(54, 54, W - 108, H - 108);
+    branch(c, 40, 190, -.2, true, 1.6); branch(c, W - 40, H - 190, Math.PI - .2, true, 1.6);
+    // monogram
+    c.save(); c.translate(W / 2, 300); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 92, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '300 126px "Cormorant Garamond", Georgia, serif'; c.fillText('A', -16, 32); c.font = '300 110px "Cormorant Garamond", Georgia, serif'; c.fillText('C', 26, 47); c.restore();
+    c.textAlign = 'center'; c.fillStyle = '#8E5F69';
+    const caps = (txt, y, px = 26) => { c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), W / 2, y); };
+    c.fillStyle = '#6B3F4C'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, 470);
+    if (guest) { let px = 96; c.font = `300 ${px}px "Great Vibes", cursive`; while (c.measureText(guest).width > 900 && px > 44) { px -= 4; c.font = `300 ${px}px "Great Vibes", cursive`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 580); }
+    c.fillStyle = '#8E5F69'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 660 : 540);
+    const y0 = guest ? 770 : 650; c.fillStyle = '#5A2F3C'; c.font = 'italic 78px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = '300 64px "Great Vibes", cursive'; c.fillText('&', W / 2, y0 + 80); c.fillStyle = '#5A2F3C'; c.font = 'italic 78px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 170);
+    // rule
+    c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 225); c.lineTo(W / 2 + 60, y0 + 225); c.stroke();
+    c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 290, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 335, 20);
+    c.fillStyle = '#4A2E36'; c.font = 'italic 34px "Cormorant Garamond", Georgia, serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 400); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 448); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 496);
+    // QR with the personalised link
+    try { await loadQR(); const q = qrcode(0, 'M'); q.addData(MY_URL); q.make(); const n = q.getModuleCount(), S = 150, m = S / n, qx = W / 2 - S / 2, qy = H - 330; c.fillStyle = 'rgba(255,251,247,.92)'; c.beginPath(); c.roundRect(qx - 16, qy - 16, S + 32, S + 32, 18); c.fill(); c.fillStyle = '#4A2E36'; for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) c.fillRect(qx + k * m, qy + r * m, m + .4, m + .4); c.fillStyle = '#6B3F4C'; caps('SCAN TO OPEN YOUR INVITATION', H - 130, 18); } catch (e) { }
+    c.fillStyle = '#8E5F69'; caps('WITH LOVE · ANANYA & CHANDAN', H - 90, 18);
+    return cv;
+  }
+  btn.onclick = async () => {
+    btn.classList.add('busy'); const label = btn.textContent; btn.textContent = 'Preparing…';
+    try {
+      const cv = await build(); const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+      const file = new File([blob], 'Ananya-Chandan-wedding-invite.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Ananya & Chandan — Wedding Invitation' }); } catch (e) { } }
+      else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+    } finally { btn.classList.remove('busy'); btn.textContent = label; }
+  };
+  /* preview helper: ?card=1 renders the keepsake card full-screen instead of the site */
+  if (qs.get('card') === '1') build().then(cv => { document.body.innerHTML = ''; document.body.style.cssText = 'background:#333;overflow:auto'; cv.style.cssText = 'display:block;margin:0 auto;max-width:100%;height:auto'; document.body.appendChild(cv); });
+})();
 })();

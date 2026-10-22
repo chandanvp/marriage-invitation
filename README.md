@@ -19,10 +19,14 @@ https://marriage.sleepysoul.cc/?to=Uncle+Ramesh
 ## Handy preview params (not for guests)
 - `?open=1` — skip the envelope · `&p=N` — land on page N (0–8)
 - `?demo=open` — auto-opens the envelope after 1.2 s
+- `&at=2026-12-03T20:00:00%2B05:30` — freeze the clock to preview countdown states
+- `&card=1` — render the "Save my invite" keepsake card full-screen
 
-## To fill in
-- Parents' names and hometowns on the *Couple* page (`index.html`, marked with `class="ph"`)
-- Transit distances on the *Venue* page (currently ≈ values)
+## Playlist
+Getting-there page embeds Spotify playlist `1e0UsAiG6FoTmkMvV7TF14` ("Best Kannada Romantic Songs"). To use your own, replace the ID in both the `pl-open` link and the `#spotify` iframe `data-src` in `index.html`.
+
+## To verify
+- Transit distances on the *Getting there* page (currently ≈ values)
 
 ## Deploy
 ```

@@ -249,7 +249,7 @@ body[data-state=married] .confetti{opacity:1}
 @media (max-height:620px){.hero{max-height:22vh}.list{display:none}}
 
 /* reception */
-.moon{position:absolute;top:12%;left:10%;width:clamp(50px,7vw,90px);aspect-ratio:1;border-radius:50%;background:#FFF7E8;box-shadow:0 0 50px rgba(255,247,232,.5);opacity:.9}
+.moon{position:absolute;top:3%;left:8%;width:clamp(44px,6vw,80px);aspect-ratio:1;border-radius:50%;background:#FFF7E8;box-shadow:0 0 50px rgba(255,247,232,.5);opacity:.9}
 .lights{position:absolute;top:0;left:-2%;width:104%;height:20vh;min-height:120px}
 .lights svg{width:100%;height:100%;overflow:visible;transform-origin:top;animation:sway 6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg)}}
@@ -350,3 +350,61 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 .pop .close{display:block;margin:.9rem auto 0;font-family:var(--sans);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.env-card,.env-flap{transition:none!important}}
+
+/* ================= Round 4 additions ================= */
+/* ---- living paintings ---- */
+.hero.living{width:min(100%,560px,calc(38vh * 1.5));aspect-ratio:3/2;max-height:none;overflow:visible;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%)}
+.hero.living img,.hero.living .fxlayer{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 84%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 84%,transparent 100%)}
+.pg-recep .hero.living::after{content:'';position:absolute;inset:-2px;pointer-events:none;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(94,74,110,0) 45%,rgba(94,74,110,.55) 80%,rgba(94,74,110,.95) 100%);mix-blend-mode:multiply}
+.hero.living.wide{width:min(100%,560px,calc(28vh * 1.5))}
+.hero.living img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:filter 1.8s ease,transform 1.8s cubic-bezier(.2,.7,.2,1);filter:saturate(.55) blur(7px);transform:scale(1.07)}
+.page.active .hero.living img{filter:none;transform:scale(1);animation:heroBreathe 16s ease-in-out 1.8s infinite alternate}
+@keyframes heroBreathe{from{transform:scale(1) translate(0,0)}to{transform:scale(1.045) translate(-.6%,-.8%)}}
+.hero.living .fx{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.4s ease 1s}
+.page.active .hero.living .fx{opacity:1}
+.fx .bulb{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:radial-gradient(circle,#FFF6D2 0%,rgba(255,228,150,.85) 35%,rgba(255,210,120,0) 70%);box-shadow:0 0 10px 3px rgba(255,220,140,.55);animation:bulbTw var(--t,2.6s) ease-in-out infinite var(--dl,0s)}
+@keyframes bulbTw{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+.fx .lamp{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,180,.9) 0%,rgba(255,200,110,.45) 40%,rgba(255,190,100,0) 70%);animation:lampGlow var(--t,3.2s) ease-in-out infinite var(--dl,0s)}
+@keyframes lampGlow{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
+.fx .flame{position:absolute;width:7px;height:12px;margin:-11px 0 0 -3.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(#FFF6C8,#FFB347);box-shadow:0 0 12px 4px rgba(255,180,80,.6);transform-origin:50% 100%;animation:flame 1.4s ease-in-out infinite var(--dl,0s)}
+.fx .sunglow{position:absolute;width:38%;aspect-ratio:1;margin:-19% 0 0 -19%;border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.9) 0%,rgba(255,217,168,.45) 35%,rgba(255,217,168,0) 70%);animation:sunPulse 6s ease-in-out infinite;mix-blend-mode:screen}
+@keyframes sunPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.12);opacity:1}}
+.fx .ray{position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.55) 0 3deg,transparent 3deg 14deg);-webkit-mask:radial-gradient(circle at var(--cx,50%) var(--cy,45%),#000 0,transparent 55%);mask:radial-gradient(circle at var(--cx,50%) var(--cy,45%),#000 0,transparent 55%);opacity:.35;animation:spin 80s linear infinite;mix-blend-mode:screen}
+.fx .petal{width:9px;height:13px;opacity:.85;animation-name:fallIn}
+@keyframes fallIn{0%{transform:translate(0,-20px) rotate(0)}100%{transform:translate(var(--sw,30px),110%) rotate(540deg)}}
+.fx .star{background:#fff}
+.fx .sparkle{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#fff;box-shadow:0 0 10px 4px rgba(255,255,255,.8);opacity:0;animation:flash 5s ease-out infinite var(--dl,0s)}
+.fx .bird{opacity:.5;width:16px}
+.fx .sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);background-size:300% 100%;background-position:calc(50% + var(--tx) * 80%) 0;transition:background-position .4s ease-out;mix-blend-mode:soft-light}
+.hero.living .fxlayer{position:absolute;inset:0;will-change:transform;transform:translate(calc(var(--tx) * 10px),calc(var(--ty) * 8px));transition:transform .3s ease-out}
+@media (max-height:720px){.hero.living{width:min(100%,560px,calc(30vh * 1.5))}.hero.living.wide{width:min(100%,560px,calc(22vh * 1.5))}}
+
+/* ---- self-writing name ---- */
+.handwrite{display:block;overflow:visible;max-width:100%}
+.handwrite text{font-family:var(--script);fill:currentColor;stroke:currentColor;stroke-width:.6px;stroke-linejoin:round;stroke-linecap:round;paint-order:stroke fill}
+.handwrite tspan{fill-opacity:0;stroke-dasharray:160;stroke-dashoffset:160;animation:hwStroke 1.1s ease forwards var(--dl,0s),hwFill .5s ease forwards calc(var(--dl,0s) + .55s)}
+@keyframes hwStroke{to{stroke-dashoffset:0}}
+@keyframes hwFill{to{fill-opacity:1}}
+.handwrite .nib{fill:var(--gold);opacity:0;animation:nibMove var(--dur,2s) linear forwards .05s}
+@keyframes nibMove{0%{opacity:0}5%{opacity:1}95%{opacity:1}100%{opacity:0}}
+.env-guest.handwrite{height:clamp(2.2rem,7.5vw,3.4rem);width:100%;color:#6B3F4C;overflow:visible}
+.dear .guest.handwrite{height:clamp(3rem,11vw,4.9rem);width:100%;margin:.1em auto .25em}
+.dear .guest.handwrite::after{display:none}
+.dear .guest-rule{display:block;width:56px;height:1px;background:var(--gold);margin:.1rem auto .55rem;transform:scaleX(0);transform-origin:left;animation:ruleIn .6s ease forwards var(--dl,1.6s)}
+@keyframes ruleIn{to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.handwrite tspan{fill-opacity:1;stroke-dashoffset:0;animation:none}}
+
+/* ---- playlist ---- */
+.playlist{width:min(100%,520px);margin-top:1rem;background:rgba(255,255,255,.8);border:1px solid #fff;border-radius:20px;padding:.8rem .9rem .9rem;box-shadow:0 20px 40px -28px rgba(74,46,54,.35);text-align:left}
+.pl-head{display:grid;grid-template-columns:auto 1fr auto;gap:.7rem;align-items:center;margin-bottom:.7rem}
+.pl-icon{width:28px;height:28px;fill:#1DB954}
+.pl-head .caps{display:block;font-size:.5rem;color:var(--muted)}
+.pl-head strong{display:block;font-weight:400;font-size:1.05rem;line-height:1.2;margin-top:.1rem}
+.pl-open{font-family:var(--sans);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.45rem .7rem;border-radius:999px;border:1px solid var(--gold);white-space:nowrap}
+.playlist iframe{width:100%;height:152px;border:0;border-radius:12px;display:block;background:#f3e9e4}
+@media (max-height:720px){.playlist iframe{height:80px}.pg-travel .sub{display:none}}
+@media (max-height:620px){.playlist{display:none}}
+
+/* ---- save my invite ---- */
+#savecard.busy{opacity:.6;pointer-events:none}
+#cardcanvas{position:fixed;left:-9999px;top:0}
