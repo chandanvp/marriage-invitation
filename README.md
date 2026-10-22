@@ -1,6 +1,6 @@
 # Ananya & Chandan — Wedding e-invite
 
-Static site (no build step) for GitHub Pages: `https://chandanvp.github.io/marriage-invitation/`
+Static site (no build step) for GitHub Pages: `https://marriage.sleepysoul.cc/`
 
 ## Files
 - `index.html` · `styles.css` · `script.js` — the invite
@@ -11,8 +11,8 @@ Static site (no build step) for GitHub Pages: `https://chandanvp.github.io/marri
 Append the guest's name to the URL — it appears on the envelope, the cover and the farewell page:
 
 ```
-https://chandanvp.github.io/marriage-invitation/?to=Priya+%26+Family
-https://chandanvp.github.io/marriage-invitation/?to=Uncle+Ramesh
+https://marriage.sleepysoul.cc/?to=Priya+%26+Family
+https://marriage.sleepysoul.cc/?to=Uncle+Ramesh
 ```
 (`&` must be written as `%26`; spaces as `+`.)
 
