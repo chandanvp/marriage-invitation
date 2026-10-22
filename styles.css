@@ -408,3 +408,14 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 /* ---- save my invite ---- */
 #savecard.busy{opacity:.6;pointer-events:none}
 #cardcanvas{position:fixed;left:-9999px;top:0}
+
+/* ---- scroll-driven parallax (per page, --sp set by JS) ---- */
+.page{--sp:0}
+.hero.living{translate:0 calc(var(--sp) * -46px)}
+.hero.living .fxlayer{translate:0 calc(var(--sp) * -70px)}
+.hero.living img{scale:calc(1.03 + var(--sp) * var(--sp) * .12)}
+.content.ev .kicker{translate:0 calc(var(--sp) * -20px)}
+.content.ev .h-ev{translate:0 calc(var(--sp) * 24px)}
+.content.ev .card{translate:0 calc(var(--sp) * 70px)}
+.hero.living .fx .petal{translate:0 calc(var(--sp) * -40px)}
+@media (prefers-reduced-motion:reduce){.hero.living,.hero.living .fxlayer,.content.ev .kicker,.content.ev .h-ev,.content.ev .card{translate:none}}

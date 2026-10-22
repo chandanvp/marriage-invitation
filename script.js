@@ -211,6 +211,14 @@ $('#share').onclick = async () => {
     [...Array(sc.birds || 0)].forEach((_, i) => { const b = document.createElementNS(SVGNS, 'svg'); b.setAttribute('class', 'bird'); b.setAttribute('viewBox', '0 0 26 10'); b.style.cssText = `--dl:${-i * 11}s;top:${14 + i * 9}%;left:-6%;width:${14 - i * 3}px;position:absolute`; b.innerHTML = '<path d="M1 6 q6 -7 12 0 q6 -7 12 0" fill="none" stroke="#8A5F3C" stroke-width="1.2" stroke-linecap="round"/>'; fx.appendChild(b); });
     if (sc.sheen) add('sheen', 0, 0);
   });
+  /* scroll-driven parallax: --sp goes -1 (page still below) → 0 (centred) → 1 (page gone above);
+     the illustration, its light layer, the heading and the card each move at a different rate */
+  const livingPages = $$('.hero.living').map(h => h.closest('.page'));
+  function depth() {
+    const vh = scroller.clientHeight;
+    livingPages.forEach(pg => { const r = pg.getBoundingClientRect(); const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh)); pg.style.setProperty('--sp', p.toFixed(3)); });
+  }
+  scroller.addEventListener('scroll', () => requestAnimationFrame(depth), { passive: true }); depth();
 })();
 
 /* ---------- save my invite: keepsake card (1080×1920) with the guest's name + QR ---------- */
@@ -226,28 +234,25 @@ $('#share').onclick = async () => {
     if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '70px "Great Vibes"', '300 40px "Cormorant Garamond"', '300 30px Jost'].map(f => document.fonts.load(f).catch(() => { })));
     const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#EBC4C2'); g.addColorStop(.5, '#F6E3E3'); g.addColorStop(1, '#FFF6F3'); c.fillStyle = g; c.fillRect(0, 0, W, H);
     const rg = c.createRadialGradient(W / 2, 520, 50, W / 2, 520, 600); rg.addColorStop(0, 'rgba(255,255,255,.7)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
-    // couple illustration, sitting low and faded upward so it never competes with the text
-    try { const im = await loadImg('artwork/couple.jpg'); const ih = 640, iw = ih * im.width / im.height, iy = H - ih - 150; c.save(); c.globalAlpha = .92; c.drawImage(im, (W - iw) / 2, iy, iw, ih); c.restore(); const fg = c.createLinearGradient(0, iy, 0, iy + 300); fg.addColorStop(0, 'rgba(247,229,229,1)'); fg.addColorStop(1, 'rgba(247,229,229,0)'); c.fillStyle = fg; c.fillRect(0, iy - 2, W, 304); const sg = c.createLinearGradient((W - iw) / 2 - 10, 0, (W - iw) / 2 + 140, 0); sg.addColorStop(0, 'rgba(249,233,233,1)'); sg.addColorStop(1, 'rgba(249,233,233,0)'); c.fillStyle = sg; c.fillRect(0, iy, (W - iw) / 2 + 140, ih); const sg2 = c.createLinearGradient((W + iw) / 2 + 10, 0, (W + iw) / 2 - 140, 0); sg2.addColorStop(0, 'rgba(251,237,237,1)'); sg2.addColorStop(1, 'rgba(251,237,237,0)'); c.fillStyle = sg2; c.fillRect((W + iw) / 2 - 140, iy, W, ih); } catch (e) { }
-    // frosted panel behind all the text
-    const y0 = guest ? 770 : 650;
-    c.save(); c.fillStyle = 'rgba(255,251,247,.78)'; c.shadowColor = 'rgba(74,46,54,.18)'; c.shadowBlur = 40; c.shadowOffsetY = 16; c.beginPath(); c.roundRect(96, 400, W - 192, (y0 + 540) - 400, 36); c.fill(); c.restore();
-    c.strokeStyle = 'rgba(184,147,63,.45)'; c.lineWidth = 1.5; c.beginPath(); c.roundRect(112, 416, W - 224, (y0 + 540) - 432, 28); c.stroke();
-    // gold frame + botanical corners
+    // couple illustration: sits entirely BELOW the text block, feathered on three sides
+    const IY = 1230;
+    try { const im = await loadImg('artwork/couple.jpg'); const ih = 540, iw = ih * im.width / im.height, ix = (W - iw) / 2; c.save(); c.globalAlpha = .95; c.drawImage(im, ix, IY, iw, ih); c.restore(); const fg = c.createLinearGradient(0, IY, 0, IY + 170); fg.addColorStop(0, 'rgba(248,231,231,1)'); fg.addColorStop(1, 'rgba(248,231,231,0)'); c.fillStyle = fg; c.fillRect(0, IY - 2, W, 174); const sg = c.createLinearGradient(ix - 10, 0, ix + 120, 0); sg.addColorStop(0, 'rgba(250,235,235,1)'); sg.addColorStop(1, 'rgba(250,235,235,0)'); c.fillStyle = sg; c.fillRect(0, IY, ix + 120, ih); const sg2 = c.createLinearGradient(ix + iw + 10, 0, ix + iw - 120, 0); sg2.addColorStop(0, 'rgba(252,240,240,1)'); sg2.addColorStop(1, 'rgba(252,240,240,0)'); c.fillStyle = sg2; c.fillRect(ix + iw - 120, IY, W, ih); const bgd = c.createLinearGradient(0, IY + ih - 120, 0, IY + ih); bgd.addColorStop(0, 'rgba(255,246,243,0)'); bgd.addColorStop(1, 'rgba(255,246,243,1)'); c.fillStyle = bgd; c.fillRect(0, IY + ih - 120, W, 122); } catch (e) { }
+    // gold frame
     c.strokeStyle = 'rgba(184,147,63,.55)'; c.lineWidth = 2; c.strokeRect(54, 54, W - 108, H - 108);
     // monogram
-    c.save(); c.translate(W / 2, 300); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 92, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '300 126px "Cormorant Garamond", Georgia, serif'; c.fillText('A', -16, 32); c.font = '300 110px "Cormorant Garamond", Georgia, serif'; c.fillText('C', 26, 47); c.restore();
-    c.textAlign = 'center'; c.fillStyle = '#8E5F69';
-    const caps = (txt, y, px = 26) => { c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), W / 2, y); };
-    c.fillStyle = '#6B3F4C'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, 470);
-    if (guest) { let px = 96; c.font = `300 ${px}px "Great Vibes", cursive`; while (c.measureText(guest).width > 820 && px > 44) { px -= 4; c.font = `300 ${px}px "Great Vibes", cursive`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 580); }
-    c.fillStyle = '#8E5F69'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 660 : 540);
-    c.fillStyle = '#5A2F3C'; c.font = 'italic 78px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = '300 64px "Great Vibes", cursive'; c.fillText('&', W / 2, y0 + 80); c.fillStyle = '#5A2F3C'; c.font = 'italic 78px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 170);
-    // rule
-    c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 225); c.lineTo(W / 2 + 60, y0 + 225); c.stroke();
-    c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 290, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 335, 20);
-    c.fillStyle = '#4A2E36'; c.font = 'italic 34px "Cormorant Garamond", Georgia, serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 400); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 448); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 496);
-    // QR with the personalised link
-    try { await loadQR(); const q = qrcode(0, 'M'); q.addData(MY_URL); q.make(); const n = q.getModuleCount(), S = 150, m = S / n, qx = W / 2 - S / 2, qy = H - 330; c.fillStyle = 'rgba(255,251,247,.92)'; c.beginPath(); c.roundRect(qx - 16, qy - 16, S + 32, S + 32, 18); c.fill(); c.fillStyle = '#4A2E36'; for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) c.fillRect(qx + k * m, qy + r * m, m + .4, m + .4); c.fillStyle = '#6B3F4C'; caps('SCAN TO OPEN YOUR INVITATION', H - 130, 18); } catch (e) { }
+    c.save(); c.translate(W / 2, 250); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '300 112px "Cormorant Garamond", Georgia, serif'; c.fillText('A', -14, 28); c.font = '300 98px "Cormorant Garamond", Georgia, serif'; c.fillText('C', 23, 42); c.restore();
+    c.textAlign = 'center';
+    const caps = (txt, y, px = 26, align = 'center', x = W / 2) => { c.textAlign = align; c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), x, y); c.textAlign = 'center'; };
+    const y0 = guest ? 650 : 560;
+    c.fillStyle = '#6B3F4C'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, guest ? 392 : 400);
+    if (guest) { let px = 90; c.font = `300 ${px}px "Great Vibes", cursive`; while (c.measureText(guest).width > 860 && px > 44) { px -= 4; c.font = `300 ${px}px "Great Vibes", cursive`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
+    c.fillStyle = '#8E5F69'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 560 : 470);
+    c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = '300 60px "Great Vibes", cursive'; c.fillText('&', W / 2, y0 + 72); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
+    c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 200); c.lineTo(W / 2 + 60, y0 + 200); c.stroke();
+    c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 258, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 300, 19);
+    c.fillStyle = '#4A2E36'; c.font = 'italic 34px "Cormorant Garamond", Georgia, serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 360); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 406); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 452);
+    // QR (bottom-left, clear of the illustration) with the personalised link
+    try { await loadQR(); const q = qrcode(0, 'M'); q.addData(MY_URL); q.make(); const n = q.getModuleCount(), S = 132, m = S / n, qx = 96, qy = H - 320; c.fillStyle = 'rgba(255,251,247,.92)'; c.beginPath(); c.roundRect(qx - 14, qy - 14, S + 28, S + 28, 16); c.fill(); c.strokeStyle = 'rgba(184,147,63,.5)'; c.lineWidth = 1.5; c.stroke(); c.fillStyle = '#4A2E36'; for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) c.fillRect(qx + k * m, qy + r * m, m + .4, m + .4); c.fillStyle = '#6B3F4C'; caps('SCAN TO OPEN', qy + S + 44, 15, 'center', qx + S / 2); caps('YOUR INVITATION', qy + S + 66, 15, 'center', qx + S / 2); } catch (e) { }
     c.fillStyle = '#8E5F69'; caps('WITH LOVE · ANANYA & CHANDAN', H - 90, 18);
     return cv;
   }
