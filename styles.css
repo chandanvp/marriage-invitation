@@ -411,11 +411,19 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 
 /* ---- scroll-driven parallax (per page, --sp set by JS) ---- */
 .page{--sp:0}
-.hero.living{translate:0 calc(var(--sp) * -46px)}
-.hero.living .fxlayer{translate:0 calc(var(--sp) * -70px)}
-.hero.living img{scale:calc(1.03 + var(--sp) * var(--sp) * .12)}
-.content.ev .kicker{translate:0 calc(var(--sp) * -20px)}
-.content.ev .h-ev{translate:0 calc(var(--sp) * 24px)}
-.content.ev .card{translate:0 calc(var(--sp) * 70px)}
-.hero.living .fx .petal{translate:0 calc(var(--sp) * -40px)}
+/* offsets are a fraction of the viewport so the depth is visible while the page is being swiped in/out
+   (with snap pages, --sp is only non-zero mid-swipe): background painting lags, heading leads, card leads most */
+.hero.living{translate:0 calc(var(--sp) * -24vh)}
+.hero.living .fxlayer{translate:0 calc(var(--sp) * -32vh)}
+.hero.living img{scale:calc(1.03 + var(--sp) * var(--sp) * .22)}
+.content.ev .kicker{translate:0 calc(var(--sp) * -8vh)}
+.content.ev .h-ev{translate:0 calc(var(--sp) * 12vh)}
+.content.ev .card{translate:0 calc(var(--sp) * 28vh);opacity:calc(1 - var(--sp) * var(--sp) * .6)}
+.hero.living .fx .petal{translate:0 calc(var(--sp) * -18vh)}
 @media (prefers-reduced-motion:reduce){.hero.living,.hero.living .fxlayer,.content.ev .kicker,.content.ev .h-ev,.content.ev .card{translate:none}}
+
+/* ---- keepsake card fallback viewer (press-and-hold to save) ---- */
+.cardview{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1rem;background:rgba(40,20,30,.78);backdrop-filter:blur(6px);color:#FFF6F3;--fg:#FFF6F3;--btn:rgba(255,255,255,.12)}
+.cardview img{max-height:68vh;max-width:92vw;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);-webkit-touch-callout:default}
+.cardview p{margin:0;font-family:var(--serif,Georgia,serif);font-style:italic;font-size:1rem;opacity:.9;text-align:center}
+.cardview .btn.solid{background:#B8933F;color:#2A1620;border-color:#B8933F}
