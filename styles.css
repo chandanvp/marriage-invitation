@@ -5,9 +5,9 @@
 :root{
   --gold:#B8933F;--gold2:#E6C98A;--gold3:#FFF6E6;--rose:#D9A7A7;--rose2:#F6E3E3;--ink:#4A2E36;--mauve:#8E5F69;
   --tx:0;--ty:0;
-  --serif:var(--sans); /* two-face system: Jost for everything, Playfair italic to highlight */
-  --script:var(--display); /* legacy alias — the cursive face was retired; 'script' now means Playfair italic */
-  --display:'Playfair Display',Georgia,serif;
+  --serif:var(--sans); /* two-face system: Jost for everything, Crimson Pro italic to highlight */
+  --script:var(--display); /* legacy alias — the cursive face was retired; 'script' now means Crimson Pro italic */
+  --display:'Crimson Pro',Georgia,'Times New Roman',serif;
   --sans:'Jost','Helvetica Neue',Arial,sans-serif;
   --foilA:#6E4F22;--foilB:#B8933F;--foilC:#F1DDA8;
 }

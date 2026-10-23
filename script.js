@@ -31,7 +31,7 @@ function handwrite(host, text, { size = 40, stagger = .07, start = 0 } = {}) {
   host.replaceWith(svg);
   // fit: shrink font if the text is wider than the host
   const fit = () => { try { const w = t.getComputedTextLength(), W = svg.clientWidth || svg.getBoundingClientRect().width; if (w > W * .96 && W) { const k = W * .96 / w; t.setAttribute('font-size', size * k); t.setAttribute('y', size * k * .78); svg.setAttribute('height', size * k * 1.15); } } catch (e) { } };
-  (document.fonts ? document.fonts.load(`italic ${size}px "Playfair Display"`).then(fit, fit) : Promise.resolve().then(fit));
+  (document.fonts ? document.fonts.load(`italic ${size}px "Crimson Pro"`).then(fit, fit) : Promise.resolve().then(fit));
   return svg;
 }
 function writeNames(text) {
@@ -177,7 +177,7 @@ window.addEventListener('keydown', e => { if (e.key === 'Escape') pop.classList.
 /* ---------- map (lazy) ---------- */
 let mapLoaded = false;
 function loadMap() { if (mapLoaded) return; mapLoaded = true; const f = $('#gmap'); f.src = f.dataset.src; }
-function coverWrite() { /* the cover guest name is now plain Playfair italic (no self-writing animation) */ }
+function coverWrite() { /* the cover guest name is now plain Crimson Pro italic (no self-writing animation) */ }
 
 /* ---------- share ---------- */
 $('#share').onclick = async () => {
@@ -230,7 +230,7 @@ $('#share').onclick = async () => {
   function branch(ctx, x, y, rot, flip, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(flip ? -s : s, s); ctx.strokeStyle = '#B8933F'; ctx.lineWidth = 1.6; ctx.lineCap = 'round'; ctx.stroke(new Path2D(BRANCH)); ctx.fillStyle = '#B8933F'; [[58, 78, 1], [118, 58, .8], [176, 40, .65]].forEach(([bx, by, k]) => { for (let a = 0; a < 4; a++) { ctx.beginPath(); ctx.ellipse(bx + Math.cos(a * Math.PI / 2) * 7 * k, by + Math.sin(a * Math.PI / 2) * 7 * k, 5 * k, 2.6 * k, a * Math.PI / 2, 0, 7); ctx.fill(); } }); ctx.restore(); }
   async function build() {
     const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
-    if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '300 30px Jost', 'italic 300 36px Jost'].map(f => document.fonts.load(f).catch(() => { })));
+    if (document.fonts) await Promise.all(['italic 60px "Crimson Pro"', '300 110px "Cormorant Garamond"', '300 30px Jost', 'italic 300 36px Jost'].map(f => document.fonts.load(f).catch(() => { })));
     const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#EBC4C2'); g.addColorStop(.5, '#F6E3E3'); g.addColorStop(1, '#FFF6F3'); c.fillStyle = g; c.fillRect(0, 0, W, H);
     const rg = c.createRadialGradient(W / 2, 520, 50, W / 2, 520, 600); rg.addColorStop(0, 'rgba(255,255,255,.7)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
     // couple illustration: sits entirely BELOW the text block, feathered on three sides
@@ -239,14 +239,14 @@ $('#share').onclick = async () => {
     // gold frame
     c.strokeStyle = 'rgba(184,147,63,.55)'; c.lineWidth = 2; c.strokeRect(54, 54, W - 108, H - 108);
     // monogram
-    c.save(); c.translate(W / 2, 250); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '400 104px "Playfair Display", Georgia, serif'; c.fillText('A', -14, 28); c.font = '400 92px "Playfair Display", Georgia, serif'; c.fillText('C', 23, 42); c.restore();
+    c.save(); c.translate(W / 2, 250); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '300 112px "Cormorant Garamond", Georgia, serif'; c.fillText('A', -14, 28); c.font = '300 98px "Cormorant Garamond", Georgia, serif'; c.fillText('C', 23, 42); c.restore();
     c.textAlign = 'center';
     const caps = (txt, y, px = 26, align = 'center', x = W / 2) => { c.textAlign = align; c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), x, y); c.textAlign = 'center'; };
     const y0 = guest ? 650 : 560;
     c.fillStyle = '#6B3F4C'; c.font = 'italic 300 34px Jost, Arial, sans-serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, guest ? 392 : 400);
-    if (guest) { let px = 60; c.font = `italic ${px}px "Playfair Display", Georgia, serif`; while (c.measureText(guest).width > 860 && px > 34) { px -= 3; c.font = `italic ${px}px "Playfair Display", Georgia, serif`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
+    if (guest) { let px = 60; c.font = `italic ${px}px "Crimson Pro", Georgia, serif`; while (c.measureText(guest).width > 860 && px > 34) { px -= 3; c.font = `italic ${px}px "Crimson Pro", Georgia, serif`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
     c.fillStyle = '#8E5F69'; c.font = 'italic 300 34px Jost, Arial, sans-serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 560 : 470);
-    c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = 'italic 50px "Playfair Display", Georgia, serif'; c.fillText('&', W / 2, y0 + 70); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
+    c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Crimson Pro", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = 'italic 50px "Crimson Pro", Georgia, serif'; c.fillText('&', W / 2, y0 + 70); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Crimson Pro", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
     c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 200); c.lineTo(W / 2 + 60, y0 + 200); c.stroke();
     c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 258, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 300, 19);
     c.fillStyle = '#4A2E36'; c.font = 'italic 300 32px Jost, Arial, sans-serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 360); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 406); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 452);
