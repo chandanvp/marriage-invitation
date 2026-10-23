@@ -13,11 +13,10 @@ if (guest) {
   guest = guest.replace(/\s+/g, ' ');
   $('#envguest').textContent = guest;
   $('#dear').innerHTML = '';
-  const l1 = document.createElement('span'); l1.className = 'dear-line'; l1.textContent = 'Dear';
-  const nm = document.createElement('span'); nm.className = 'guest'; nm.textContent = guest;
-  const rl = document.createElement('span'); rl.className = 'guest-rule';
+  const to = document.createElement('span'); to.className = 'dear-to'; to.append('Dear ');
+  const nm = document.createElement('span'); nm.className = 'guest'; nm.textContent = guest; to.append(nm, ',');
   const l2 = document.createElement('span'); l2.className = 'dear-line'; l2.textContent = 'you are warmly invited to the wedding of';
-  $('#dear').append(l1, nm, rl, l2);
+  $('#dear').append(to, l2);
   $('#endguest').textContent = `Dear ${guest},`; $('#endguest').hidden = false;
 }
 
@@ -32,11 +31,11 @@ function handwrite(host, text, { size = 40, stagger = .07, start = 0 } = {}) {
   host.replaceWith(svg);
   // fit: shrink font if the text is wider than the host
   const fit = () => { try { const w = t.getComputedTextLength(), W = svg.clientWidth || svg.getBoundingClientRect().width; if (w > W * .96 && W) { const k = W * .96 / w; t.setAttribute('font-size', size * k); t.setAttribute('y', size * k * .78); svg.setAttribute('height', size * k * 1.15); } } catch (e) { } };
-  (document.fonts ? document.fonts.load(`${size}px "Great Vibes"`).then(fit, fit) : Promise.resolve().then(fit));
+  (document.fonts ? document.fonts.load(`italic ${size}px "Playfair Display"`).then(fit, fit) : Promise.resolve().then(fit));
   return svg;
 }
 function writeNames(text) {
-  const envSize = Math.min(44, Math.max(26, innerWidth * .07));
+  const envSize = Math.min(28, Math.max(18, innerWidth * .048));
   handwrite($('#envguest'), text, { size: envSize, stagger: .06, start: .9 });
 }
 if (guest) writeNames(guest); else writeNames('our dearest family & friends');
@@ -181,7 +180,7 @@ let mapLoaded = false;
 function loadMap() { if (mapLoaded) return; mapLoaded = true; const f = $('#gmap'); f.src = f.dataset.src; }
 let spotifyLoaded = false;
 function loadSpotify() { if (spotifyLoaded) return; spotifyLoaded = true; const f = $('#spotify'); if (f) f.src = f.dataset.src; }
-function coverWrite() { if (coverWrite.done) return; coverWrite.done = true; const g = $('.dear .guest'); if (g) handwrite(g, guest, { size: Math.min(60, Math.max(34, innerWidth * .095)), stagger: .07, start: .4 }); }
+function coverWrite() { /* the cover guest name is now plain Playfair italic (no self-writing animation) */ }
 
 /* ---------- share ---------- */
 $('#share').onclick = async () => {
@@ -195,7 +194,7 @@ $('#share').onclick = async () => {
   // positions are % of the 3:2 frame, matched to the artwork
   const SCENES = {
     reception: { bulbs: [[36, 30], [41, 38], [46, 33], [50, 22], [55, 32], [60, 37], [66, 31], [71, 25], [33, 24], [68, 20]], lamps: [[9, 48], [12, 53], [16, 48], [67, 50], [74, 49]], stars: 18, petals: 7, sheen: true },
-    muhurtam: { flames: [[21, 60], [33, 56], [74, 58], [82, 62]], sun: [50, 40], rays: [50, 40], petals: 8, sheen: true },
+    muhurtam: { flames: [[21.5, 64], [82, 64]], sun: [50, 40], rays: [50, 40], petals: 8, sheen: true },
     lunch: { bulbs: [[36, 30], [41, 36], [46, 32], [52, 24], [56, 31], [61, 36], [66, 30], [70, 25]], lamps: [[9, 46], [12, 51], [16, 46]], sun: [78, 8], sparkles: 6, petals: 8, sheen: true },
     venue: { sun: [12, 16], birds: 2, petals: 5, sheen: true }
   };
@@ -234,7 +233,7 @@ $('#share').onclick = async () => {
   function branch(ctx, x, y, rot, flip, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(flip ? -s : s, s); ctx.strokeStyle = '#B8933F'; ctx.lineWidth = 1.6; ctx.lineCap = 'round'; ctx.stroke(new Path2D(BRANCH)); ctx.fillStyle = '#B8933F'; [[58, 78, 1], [118, 58, .8], [176, 40, .65]].forEach(([bx, by, k]) => { for (let a = 0; a < 4; a++) { ctx.beginPath(); ctx.ellipse(bx + Math.cos(a * Math.PI / 2) * 7 * k, by + Math.sin(a * Math.PI / 2) * 7 * k, 5 * k, 2.6 * k, a * Math.PI / 2, 0, 7); ctx.fill(); } }); ctx.restore(); }
   async function build() {
     const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
-    if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '70px "Great Vibes"', '300 40px "Cormorant Garamond"', '300 30px Jost'].map(f => document.fonts.load(f).catch(() => { })));
+    if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '300 40px "Cormorant Garamond"', '300 30px Jost'].map(f => document.fonts.load(f).catch(() => { })));
     const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#EBC4C2'); g.addColorStop(.5, '#F6E3E3'); g.addColorStop(1, '#FFF6F3'); c.fillStyle = g; c.fillRect(0, 0, W, H);
     const rg = c.createRadialGradient(W / 2, 520, 50, W / 2, 520, 600); rg.addColorStop(0, 'rgba(255,255,255,.7)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
     // couple illustration: sits entirely BELOW the text block, feathered on three sides
@@ -248,9 +247,9 @@ $('#share').onclick = async () => {
     const caps = (txt, y, px = 26, align = 'center', x = W / 2) => { c.textAlign = align; c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), x, y); c.textAlign = 'center'; };
     const y0 = guest ? 650 : 560;
     c.fillStyle = '#6B3F4C'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, guest ? 392 : 400);
-    if (guest) { let px = 90; c.font = `300 ${px}px "Great Vibes", cursive`; while (c.measureText(guest).width > 860 && px > 44) { px -= 4; c.font = `300 ${px}px "Great Vibes", cursive`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
+    if (guest) { let px = 60; c.font = `italic ${px}px "Playfair Display", Georgia, serif`; while (c.measureText(guest).width > 860 && px > 34) { px -= 3; c.font = `italic ${px}px "Playfair Display", Georgia, serif`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
     c.fillStyle = '#8E5F69'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 560 : 470);
-    c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = '300 60px "Great Vibes", cursive'; c.fillText('&', W / 2, y0 + 72); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
+    c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = 'italic 50px "Playfair Display", Georgia, serif'; c.fillText('&', W / 2, y0 + 70); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
     c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 200); c.lineTo(W / 2 + 60, y0 + 200); c.stroke();
     c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 258, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 300, 19);
     c.fillStyle = '#4A2E36'; c.font = 'italic 34px "Cormorant Garamond", Georgia, serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 360); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 406); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 452);

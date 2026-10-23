@@ -15,8 +15,8 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Great+Vibes&family=Jost:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Great+Vibes&family=Jost:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body data-state="pre" class="sealed">
@@ -83,9 +83,9 @@
     </div>
     <div class="env-under rv-env">
       <p class="env-title">Ananya <span class="amp">&amp;</span> Chandan</p>
-      <p class="caps" style="font-size:.6rem;margin-top:.35rem;color:#8E5F69">03 &amp; 04 December 2026 · Davanagere</p>
+      <p class="caps env-date">03 &amp; 04 December 2026 · Davanagere</p>
     </div>
-    <p class="caps env-hint" id="envhint">Tap the seal to open</p>
+    <p class="env-hint" id="envhint"><span class="env-hint-arrow" aria-hidden="true">↑</span><span class="caps">Tap the seal to open</span></p>
   </div>
 </div>
 
@@ -143,8 +143,8 @@
       <svg class="corner br px" style="--d:.6"><use href="#branch"/></svg>
     </div>
     <div class="content">
+      <svg class="mono cover-mono rv"><use href="#monogram"/></svg>
       <p class="caps muted rv">Together with their families</p>
-      <div class="cameo rv"><img src="artwork/couple.jpg" alt="Illustration of Ananya and Chandan"></div>
       <div class="couple rv">
         <div class="person">
           <p class="pname">Ananya <span class="ini">N</span> Acharya</p>
@@ -152,7 +152,7 @@
           <p class="parents">Smt. Taramani <span class="ini">B M</span> &amp; Sri Nagalingacharya <span class="ini">T</span></p>
           <p class="town caps">Davanagere</p>
         </div>
-        <div class="knotmark"><svg class="mono"><use href="#monogram"/></svg></div>
+        <div class="knotmark"><div class="cameo"><img src="artwork/couple.jpg" alt="Illustration of Ananya and Chandan"></div></div>
         <div class="person">
           <p class="pname">Chandan <span class="ini">V</span> <span class="ini">P</span></p>
           <p class="rel">son of</p>
@@ -176,7 +176,7 @@
     <div class="content ev">
       <p class="caps muted kicker rv">An evening of celebration</p>
       <figure class="hero living rv" data-living="reception"><img src="artwork/reception.jpg" alt="Illustration of the couple on the reception stage" loading="lazy"></figure>
-      <h2 class="h-ev script rv">Reception</h2>
+      <h2 class="h-ev rv">Reception</h2>
       <div class="card rv">
         <p class="date">Thursday, 3 December 2026</p>
         <p class="when">7:30 PM onwards</p>
@@ -198,7 +198,7 @@
     <div class="content ev">
       <p class="caps muted kicker rv">A morning of forever</p>
       <figure class="hero living rv" data-living="muhurtam"><img src="artwork/muhurtam.jpg" alt="Illustration of the groom tying the mangalsutra under the mandap" loading="lazy"></figure>
-      <h2 class="h-ev script rv">Muhurtam</h2>
+      <h2 class="h-ev rv">Muhurtam</h2>
       <div class="card rv">
         <p class="date">Friday, 4 December 2026</p>
         <p class="when">8:30 – 9:15 AM</p>
@@ -214,7 +214,7 @@
     <div class="content ev">
       <p class="caps muted kicker rv">After the muhurtam</p>
       <figure class="hero living rv" data-living="lunch"><img src="artwork/lunch.jpg" alt="Illustration of the couple on stage at the day reception" loading="lazy"></figure>
-      <h2 class="h-ev script rv" style="font-size:clamp(2.4rem,8vw,4.4rem)">Reception &amp; Lunch</h2>
+      <h2 class="h-ev rv" style="font-size:clamp(2rem,6.6vw,3.6rem)">Reception &amp; Lunch</h2>
       <div class="card rv">
         <p class="date">Friday, 4 December 2026</p>
         <p class="when">12:30 PM onwards</p>
@@ -261,7 +261,7 @@
     </div>
     <div class="content">
       <p class="caps muted rv">Getting there</p>
-      <h2 class="h-ev script rv" style="font-size:clamp(2.6rem,9vw,4.6rem)">Reaching Davanagere</h2>
+      <h2 class="h-ev rv" style="font-size:clamp(2rem,6.6vw,3.6rem)">Reaching Davanagere</h2>
       <p class="sub rv" style="margin-top:.2rem">The hall is in the heart of town — a short ride from both stations. Music for the road below.</p>
       <div class="transit rv">
         <a class="tile" href="https://www.google.com/maps/dir/?api=1&origin=Davanagere+Railway+Station&destination=Gundi+Mahadevappa+Kalyana+Mandira,+Dental+College+Road,+MCC+B+Block,+Davanagere&travelmode=driving" target="_blank" rel="noopener">
@@ -292,7 +292,7 @@
     <div class="content">
       <svg class="mono foot-mono rv"><use href="#monogram"/></svg>
       <p class="end-guest rv" id="endguest" hidden></p>
-      <h2 class="end-main script rv" id="endmain">See you at the celebrations</h2>
+      <h2 class="end-main rv" id="endmain">See you at the celebrations</h2>
       <p class="end-sub rv" id="endsub">We can’t wait to welcome you to our wedding</p>
       <p class="caps muted rv" style="margin-top:.8rem">3 &amp; 4 December 2026 · Davanagere</p>
       <div class="rule rv"></div>
