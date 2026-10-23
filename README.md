@@ -4,7 +4,7 @@ Static site (no build step) for GitHub Pages: `https://marriage.sleepysoul.cc/`
 
 ## Files
 - `index.html` · `styles.css` · `script.js` — the invite
-- `artwork/` — Ghibli-style watercolour illustrations (`couple`, `reception`, `muhurtam`, `lunch`, `venue`) and `og.jpg` (WhatsApp/link preview)
+- `artwork/` — Ghibli-style watercolour illustrations (`hands` on the cover, `couple` on the Couple page and keepsake card, `reception`, `muhurtam`, `lunch`, `venue`) and `og.jpg` (WhatsApp/link preview)
 - `favicon.svg` — AC monogram · `.nojekyll` — serve as-is
 
 ## Personalised links
