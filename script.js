@@ -62,6 +62,9 @@ for (let i = 0; i < 8; i++) { const f = document.createElement('i'); f.className
   [196, 150, 22].forEach(r => add('circle', { cx: 200, cy: 200, r }));
 })();
 
+/* phone layout: put the cover painting into the text column so it flows below the date lines (see styles.css) */
+if (matchMedia('(max-width: 760px)').matches) { const a = $('.pg-cover .bg .art'), c = $('.pg-cover .content'); if (a && c) c.appendChild(a); }
+
 /* ---------- envelope ---------- */
 const env = $('#env'), seal = $('#seal');
 let opened = false;
