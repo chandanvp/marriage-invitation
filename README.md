@@ -22,9 +22,6 @@ https://marriage.sleepysoul.cc/?to=Uncle+Ramesh
 - `&at=2026-12-03T20:00:00%2B05:30` — freeze the clock to preview countdown states
 - `&card=1` — render the "Save my invite" keepsake card full-screen
 
-## Playlist
-Getting-there page embeds Spotify playlist `1e0UsAiG6FoTmkMvV7TF14` ("Best Kannada Romantic Songs"). To use your own, replace the ID in both the `pl-open` link and the `#spotify` iframe `data-src` in `index.html`.
-
 ## To verify
 - Transit distances on the *Getting there* page (currently ≈ values)
 

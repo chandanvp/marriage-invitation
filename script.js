@@ -42,7 +42,7 @@ if (guest) writeNames(guest); else writeNames('our dearest family & friends');
 function petals(el, n) { if (!el) return; for (let i = 0; i < n; i++) { const p = document.createElement('i'); p.className = 'petal'; p.style.cssText = `left:${rnd(0, 100)}%;--t:${rnd(10, 18)}s;--dl:${rnd(-18, 0)}s;--sw:${rnd(-60, 60)}px;transform:scale(${rnd(.6, 1.2)})`; el.appendChild(p); } }
 function stars(el, n, max) { if (!el) return; for (let i = 0; i < n; i++) { const s = document.createElement('i'); s.className = 'star'; const z = rnd(1, max); s.style.cssText = `left:${rnd(0, 100)}%;top:${rnd(0, 100)}%;width:${z}px;height:${z}px;--t:${rnd(2, 5)}s;--dl:${rnd(0, 4)}s`; el.appendChild(s); } }
 function confetti(el) { if (!el) return; for (let i = 0; i < 40; i++) { const c = document.createElement('i'); c.className = 'confetti'; c.style.cssText = `left:${rnd(0, 100)}%;background:${['#F6C9D0', '#E9CF8E', '#CFE3F4', '#D9EBD9', '#C9A05A'][i % 5]};--t:${rnd(5, 9)}s;--dl:${rnd(-9, 0)}s;border-radius:${i % 3 ? 2 : 50}%`; el.appendChild(c); } }
-function jasmine(el) { if (!el) return; for (let i = 0; i < 11; i++) { const s = document.createElement('i'); s.className = 'strand'; s.style.cssText = `left:${4 + i * 9.2}%;height:${rnd(12, 26)}vh;--dl:${rnd(-4, 0)}s`; el.appendChild(s); } }
+function jasmine(el) { if (!el) return; for (let i = 0; i < 11; i++) { const s = document.createElement('i'); s.className = 'strand'; s.style.cssText = `left:${4 + i * 9.2}%;height:${rnd(6, 12)}vh;--dl:${rnd(-4, 0)}s`; el.appendChild(s); } }
 petals($('#envpetals'), 10); petals($('#petals1'), 14); petals($('#petals2'), 8); petals($('#petals3'), 10); petals($('#petals9'), 8);
 stars($('#stars5'), 50, 2.2); stars($('#stars9'), 60, 2.2);
 confetti($('#confetti')); confetti($('#confetti2'));
@@ -105,7 +105,6 @@ const io = new IntersectionObserver(es => {
     garland.style.setProperty('--navcol', getComputedStyle(e.target).color);
     if (document.body.classList.contains('open')) placeFirefly(i);
     if (e.target.classList.contains('pg-venue')) loadMap();
-    if (e.target.classList.contains('pg-travel')) loadSpotify();
   });
 }, { root: scroller, threshold: .5 });
 pages.forEach(p => io.observe(p));
@@ -178,8 +177,6 @@ window.addEventListener('keydown', e => { if (e.key === 'Escape') pop.classList.
 /* ---------- map (lazy) ---------- */
 let mapLoaded = false;
 function loadMap() { if (mapLoaded) return; mapLoaded = true; const f = $('#gmap'); f.src = f.dataset.src; }
-let spotifyLoaded = false;
-function loadSpotify() { if (spotifyLoaded) return; spotifyLoaded = true; const f = $('#spotify'); if (f) f.src = f.dataset.src; }
 function coverWrite() { /* the cover guest name is now plain Playfair italic (no self-writing animation) */ }
 
 /* ---------- share ---------- */
@@ -193,10 +190,10 @@ $('#share').onclick = async () => {
 (function living() {
   // positions are % of the 3:2 frame, matched to the artwork
   const SCENES = {
-    reception: { bulbs: [[36, 30], [41, 38], [46, 33], [50, 22], [55, 32], [60, 37], [66, 31], [71, 25], [33, 24], [68, 20]], lamps: [[9, 48], [12, 53], [16, 48], [67, 50], [74, 49]], stars: 18, petals: 7, sheen: true },
-    muhurtam: { flames: [[21.5, 64], [82, 64]], sun: [50, 40], rays: [50, 40], petals: 8, sheen: true },
-    lunch: { bulbs: [[36, 30], [41, 36], [46, 32], [52, 24], [56, 31], [61, 36], [66, 30], [70, 25]], lamps: [[9, 46], [12, 51], [16, 46]], sun: [78, 8], sparkles: 6, petals: 8, sheen: true },
-    venue: { sun: [12, 16], birds: 2, petals: 5, sheen: true }
+    reception: { bulbs: [[36, 30], [41, 38], [46, 33], [50, 22], [55, 32], [60, 37], [66, 31], [71, 25], [33, 24], [68, 20]], lamps: [[9, 48], [12, 53], [16, 48], [67, 50], [74, 49]], stars: 18, petals: 7 },
+    muhurtam: { flames: [[21.5, 64], [82, 64]], petals: 8 },
+    lunch: { bulbs: [[36, 30], [41, 36], [46, 32], [52, 24], [56, 31], [61, 36], [66, 30], [70, 25]], lamps: [[9, 46], [12, 51], [16, 46]], sparkles: 4, petals: 8 },
+    venue: { sun: [12, 16], birds: 2, petals: 5 }
   };
   $$('.hero.living').forEach(h => {
     const sc = SCENES[h.dataset.living]; if (!sc) return;
@@ -233,7 +230,7 @@ $('#share').onclick = async () => {
   function branch(ctx, x, y, rot, flip, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(flip ? -s : s, s); ctx.strokeStyle = '#B8933F'; ctx.lineWidth = 1.6; ctx.lineCap = 'round'; ctx.stroke(new Path2D(BRANCH)); ctx.fillStyle = '#B8933F'; [[58, 78, 1], [118, 58, .8], [176, 40, .65]].forEach(([bx, by, k]) => { for (let a = 0; a < 4; a++) { ctx.beginPath(); ctx.ellipse(bx + Math.cos(a * Math.PI / 2) * 7 * k, by + Math.sin(a * Math.PI / 2) * 7 * k, 5 * k, 2.6 * k, a * Math.PI / 2, 0, 7); ctx.fill(); } }); ctx.restore(); }
   async function build() {
     const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
-    if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '300 40px "Cormorant Garamond"', '300 30px Jost'].map(f => document.fonts.load(f).catch(() => { })));
+    if (document.fonts) await Promise.all(['italic 60px "Playfair Display"', '300 30px Jost', 'italic 300 36px Jost'].map(f => document.fonts.load(f).catch(() => { })));
     const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#EBC4C2'); g.addColorStop(.5, '#F6E3E3'); g.addColorStop(1, '#FFF6F3'); c.fillStyle = g; c.fillRect(0, 0, W, H);
     const rg = c.createRadialGradient(W / 2, 520, 50, W / 2, 520, 600); rg.addColorStop(0, 'rgba(255,255,255,.7)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
     // couple illustration: sits entirely BELOW the text block, feathered on three sides
@@ -242,17 +239,17 @@ $('#share').onclick = async () => {
     // gold frame
     c.strokeStyle = 'rgba(184,147,63,.55)'; c.lineWidth = 2; c.strokeRect(54, 54, W - 108, H - 108);
     // monogram
-    c.save(); c.translate(W / 2, 250); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '300 112px "Cormorant Garamond", Georgia, serif'; c.fillText('A', -14, 28); c.font = '300 98px "Cormorant Garamond", Georgia, serif'; c.fillText('C', 23, 42); c.restore();
+    c.save(); c.translate(W / 2, 250); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '400 104px "Playfair Display", Georgia, serif'; c.fillText('A', -14, 28); c.font = '400 92px "Playfair Display", Georgia, serif'; c.fillText('C', 23, 42); c.restore();
     c.textAlign = 'center';
     const caps = (txt, y, px = 26, align = 'center', x = W / 2) => { c.textAlign = align; c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), x, y); c.textAlign = 'center'; };
     const y0 = guest ? 650 : 560;
-    c.fillStyle = '#6B3F4C'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, guest ? 392 : 400);
+    c.fillStyle = '#6B3F4C'; c.font = 'italic 300 34px Jost, Arial, sans-serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, guest ? 392 : 400);
     if (guest) { let px = 60; c.font = `italic ${px}px "Playfair Display", Georgia, serif`; while (c.measureText(guest).width > 860 && px > 34) { px -= 3; c.font = `italic ${px}px "Playfair Display", Georgia, serif`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
-    c.fillStyle = '#8E5F69'; c.font = 'italic 36px "Cormorant Garamond", Georgia, serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 560 : 470);
+    c.fillStyle = '#8E5F69'; c.font = 'italic 300 34px Jost, Arial, sans-serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 560 : 470);
     c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = 'italic 50px "Playfair Display", Georgia, serif'; c.fillText('&', W / 2, y0 + 70); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Playfair Display", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
     c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 200); c.lineTo(W / 2 + 60, y0 + 200); c.stroke();
     c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 258, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 300, 19);
-    c.fillStyle = '#4A2E36'; c.font = 'italic 34px "Cormorant Garamond", Georgia, serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 360); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 406); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 452);
+    c.fillStyle = '#4A2E36'; c.font = 'italic 300 32px Jost, Arial, sans-serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 360); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 406); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 452);
     // QR (bottom-left, clear of the illustration) with the personalised link
     try { await loadQR(); const q = qrcode(0, 'M'); q.addData(MY_URL); q.make(); const n = q.getModuleCount(), S = 132, m = S / n, qx = 96, qy = H - 320; c.fillStyle = 'rgba(255,251,247,.92)'; c.beginPath(); c.roundRect(qx - 14, qy - 14, S + 28, S + 28, 16); c.fill(); c.strokeStyle = 'rgba(184,147,63,.5)'; c.lineWidth = 1.5; c.stroke(); c.fillStyle = '#4A2E36'; for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) c.fillRect(qx + k * m, qy + r * m, m + .4, m + .4); c.fillStyle = '#6B3F4C'; caps('SCAN TO OPEN', qy + S + 44, 15, 'center', qx + S / 2); caps('YOUR INVITATION', qy + S + 66, 15, 'center', qx + S / 2); } catch (e) { }
     c.fillStyle = '#8E5F69'; caps('WITH LOVE · ANANYA & CHANDAN', H - 90, 18);

@@ -5,9 +5,9 @@
 :root{
   --gold:#B8933F;--gold2:#E6C98A;--gold3:#FFF6E6;--rose:#D9A7A7;--rose2:#F6E3E3;--ink:#4A2E36;--mauve:#8E5F69;
   --tx:0;--ty:0;
-  --serif:'Cormorant Garamond',Garamond,'Times New Roman',serif;
+  --serif:var(--sans); /* two-face system: Jost for everything, Playfair italic to highlight */
   --script:var(--display); /* legacy alias — the cursive face was retired; 'script' now means Playfair italic */
-  --display:'Playfair Display',var(--serif);
+  --display:'Playfair Display',Georgia,serif;
   --sans:'Jost','Helvetica Neue',Arial,sans-serif;
   --foilA:#6E4F22;--foilB:#B8933F;--foilC:#F1DDA8;
 }
@@ -18,7 +18,8 @@ a{color:inherit}
 .caps{font-family:var(--sans);font-weight:300;letter-spacing:.32em;text-transform:uppercase;font-size:.72rem}
 .script{font-family:var(--display);font-style:italic;font-weight:400}
 /* soft italic lines keep the serif */
-.dear,.sub,.rel,.quote,.list,.end-sub,.tile em,.card em,.daylist em,.cd-main,.calrow strong,.ph{font-family:var(--serif)}
+.dear,.sub,.rel,.quote,.end-sub,.ph{font-style:italic;font-weight:300}
+.quote,.cd-main{font-family:var(--display)}
 .parents,.card p,.card li,.datecard,.cd,.calrow,.tile,.end-guest,.pop{font-family:var(--sans)}
 .muted{color:var(--muted,var(--mauve))}
 .ph{font-style:italic;opacity:.55;border-bottom:1px dashed currentColor}
@@ -218,7 +219,8 @@ body[data-state=married] .confetti{opacity:1}
 .kolam.end{opacity:.14;color:#E6C98A}
 .kolam .kl *{stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 3.2s ease-out}
 .page.active .kolam .kl *{stroke-dashoffset:0}
-.couple{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(.8rem,3vw,2rem);align-items:start;width:100%;margin-top:.9rem}
+.couple{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:clamp(.8rem,3vw,2rem);align-items:start;justify-items:center;width:100%;margin-top:.9rem}
+.person{width:100%;min-width:0}
 .pg-couple .cover-mono{margin-bottom:.8rem}
 .pg-couple .content{max-width:940px}
 .knotmark{align-self:center;display:grid;place-items:center;position:relative;isolation:isolate}
@@ -228,7 +230,7 @@ body[data-state=married] .confetti{opacity:1}
 @media (max-width:560px){.knotmark .cameo{width:clamp(104px,30vw,130px)}}
 .person{text-align:center}
 .pname{font-family:var(--display);font-style:italic;font-size:clamp(1.4rem,4.6vw,2.4rem);line-height:1.15;color:#6B3F4C}
-@media (min-width:561px){.pname{white-space:nowrap;font-size:clamp(1.4rem,3vw,2.3rem)}}
+@media (min-width:561px){.pname{font-size:clamp(1.4rem,3vw,2.3rem)}}
 .rel{font-style:italic;color:var(--muted);margin-top:.35rem;font-size:.95rem}
 .parents{font-size:clamp(.95rem,2.8vw,1.15rem);line-height:1.45;margin-top:.15rem}
 .parents .ini{letter-spacing:.1em}
@@ -236,7 +238,7 @@ body[data-state=married] .confetti{opacity:1}
 .hero.photo img{object-position:50% 40%}
 .knotmark{display:grid;place-items:center}
 .quote{font-size:clamp(1.15rem,3.6vw,1.6rem);font-style:italic;line-height:1.45;max-width:30ch;color:#5C3F49}
-@media (max-width:560px){.couple{grid-template-columns:1fr;gap:.5rem}}
+@media (max-width:560px){.couple{grid-template-columns:minmax(0,1fr);gap:.5rem}.knotmark{width:100%;justify-self:center}}
 
 /* ---------------- schedule overview ---------------- */
 .h-ev{font-family:var(--display);font-style:italic;font-size:clamp(2.2rem,7.2vw,4rem);line-height:1.1;font-weight:400}
@@ -252,7 +254,7 @@ body[data-state=married] .confetti{opacity:1}
 .timeline strong{display:block;font-weight:300;font-size:clamp(1.5rem,4.6vw,2rem);line-height:1.1;font-family:var(--display);font-style:italic;color:#6B3F4C}
 .timeline .caps{font-size:.56rem;color:var(--muted)}
 .timeline em{font-size:.98rem;opacity:.8}
-.jasmine{position:absolute;top:0;left:0;right:0;height:30vh;pointer-events:none}
+.jasmine{position:absolute;top:0;left:0;right:0;height:30vh;pointer-events:none;opacity:.7}
 .strand{position:absolute;top:0;width:2px;background:repeating-linear-gradient(#fff 0 6px,transparent 6px 14px);transform-origin:top;animation:strandsway 4.5s ease-in-out infinite var(--dl,0s)}
 .strand::after{content:'';position:absolute;left:50%;bottom:-6px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.4)}
 @keyframes strandsway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
@@ -275,7 +277,7 @@ body[data-state=married] .confetti{opacity:1}
 
 /* reception */
 .moon{position:absolute;top:3%;left:8%;width:clamp(44px,6vw,80px);aspect-ratio:1;border-radius:50%;background:#FFF7E8;box-shadow:0 0 50px rgba(255,247,232,.5);opacity:.9}
-.lights{position:absolute;top:0;left:-2%;width:104%;height:20vh;min-height:120px}
+.lights{position:absolute;top:0;left:-2%;width:104%;height:11vh;min-height:70px;max-height:110px;opacity:.85}
 .lights svg{width:100%;height:100%;overflow:visible;transform-origin:top;animation:sway 6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg)}}
 .wire{fill:none;stroke:rgba(255,255,255,.35);stroke-width:1}
@@ -285,8 +287,8 @@ body[data-state=married] .confetti{opacity:1}
 .lantern::after{content:'';position:absolute;left:50%;bottom:-10px;width:2px;height:10px;background:#F2A86B;transform:translateX(-50%)}
 @keyframes rise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.9}100%{transform:translateY(-120vh) translateX(var(--sw,20px));opacity:0}}
 /* muhurtam */
-.sun{position:absolute;left:50%;top:55%;width:min(70vmin,520px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#FFF4DA 0%,#FFD9A8 35%,rgba(255,217,168,0) 70%)}
-.rays{position:absolute;left:50%;top:55%;width:min(150vmin,1200px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;opacity:.35;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.9) 0 4deg,transparent 4deg 16deg);-webkit-mask:radial-gradient(circle,#000 10%,transparent 65%);mask:radial-gradient(circle,#000 10%,transparent 65%);animation:spin 90s linear infinite}
+.sun{position:absolute;left:50%;top:55%;opacity:.38;width:min(56vmin,420px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#FFF4DA 0%,#FFD9A8 35%,rgba(255,217,168,0) 70%)}
+.rays{position:absolute;left:50%;top:55%;width:min(150vmin,1200px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;opacity:.14;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.9) 0 4deg,transparent 4deg 16deg);-webkit-mask:radial-gradient(circle,#000 10%,transparent 65%);mask:radial-gradient(circle,#000 10%,transparent 65%);animation:spin 90s linear infinite}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 .bird{position:absolute;top:22%;left:-5%;width:26px;opacity:.55;animation:fly 28s linear infinite var(--dl,0s)}
 .bird path{fill:none;stroke:var(--sketch,#8A5F3C);stroke-width:1.2;stroke-linecap:round}
@@ -297,7 +299,7 @@ body[data-state=married] .confetti{opacity:1}
 .diya::after{content:'';position:absolute;left:50%;bottom:40%;width:45%;aspect-ratio:1/1.5;transform:translateX(-50%);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(#FFF6C8,#FFB347);box-shadow:0 0 14px 4px rgba(255,180,80,.6);animation:flame 1.6s ease-in-out infinite var(--dl,0s)}
 @keyframes flame{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-52%) scale(1.08,1.15)}}
 /* lunch */
-.noon{position:absolute;left:50%;top:-18vmin;width:70vmin;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(255,236,190,.7) 30%,rgba(255,236,190,0) 70%)}
+.noon{position:absolute;left:50%;top:-30vmin;width:60vmin;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;opacity:.55;background:radial-gradient(circle,rgba(255,255,255,.9) 0%,rgba(255,236,190,.5) 30%,rgba(255,236,190,0) 70%)}
 .flash{position:absolute;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 18px 8px rgba(255,255,255,.9);opacity:0;animation:flash 6s ease-out infinite var(--dl,0s)}
 @keyframes flash{0%,100%{opacity:0;transform:scale(.2)}2%{opacity:1;transform:scale(1.4)}10%{opacity:0;transform:scale(.6)}}
 
@@ -392,15 +394,15 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 .fx .lamp{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,180,.9) 0%,rgba(255,200,110,.45) 40%,rgba(255,190,100,0) 70%);animation:lampGlow var(--t,3.2s) ease-in-out infinite var(--dl,0s)}
 @keyframes lampGlow{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
 .fx .flame{position:absolute;width:7px;height:12px;margin:-11px 0 0 -3.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(#FFF6C8,#FFB347);box-shadow:0 0 12px 4px rgba(255,180,80,.6);transform-origin:50% 100%;animation:flame 1.4s ease-in-out infinite var(--dl,0s)}
-.fx .sunglow{position:absolute;width:38%;aspect-ratio:1;margin:-19% 0 0 -19%;border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.9) 0%,rgba(255,217,168,.45) 35%,rgba(255,217,168,0) 70%);animation:sunPulse 6s ease-in-out infinite;mix-blend-mode:screen}
+.fx .sunglow{position:absolute;width:30%;aspect-ratio:1;margin:-15% 0 0 -15%;border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.45) 0%,rgba(255,217,168,.2) 35%,rgba(255,217,168,0) 70%);animation:sunPulse 6s ease-in-out infinite;mix-blend-mode:screen}
 @keyframes sunPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.12);opacity:1}}
-.fx .ray{position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.55) 0 3deg,transparent 3deg 14deg);-webkit-mask:radial-gradient(circle at var(--cx,50%) var(--cy,45%),#000 0,transparent 55%);mask:radial-gradient(circle at var(--cx,50%) var(--cy,45%),#000 0,transparent 55%);opacity:.35;animation:spin 80s linear infinite;mix-blend-mode:screen}
+.fx .ray{position:absolute;inset:-20%;opacity:.35;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.55) 0 3deg,transparent 3deg 14deg);-webkit-mask:radial-gradient(circle at var(--cx,50%) var(--cy,45%),#000 0,transparent 55%);mask:radial-gradient(circle at var(--cx,50%) var(--cy,45%),#000 0,transparent 55%);opacity:.35;animation:spin 80s linear infinite;mix-blend-mode:screen}
 .fx .petal{width:9px;height:13px;opacity:.85;animation-name:fallIn}
 @keyframes fallIn{0%{transform:translate(0,-20px) rotate(0)}100%{transform:translate(var(--sw,30px),110%) rotate(540deg)}}
 .fx .star{background:#fff}
 .fx .sparkle{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#fff;box-shadow:0 0 10px 4px rgba(255,255,255,.8);opacity:0;animation:flash 5s ease-out infinite var(--dl,0s)}
 .fx .bird{opacity:.5;width:16px}
-.fx .sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);background-size:300% 100%;background-position:calc(50% + var(--tx) * 80%) 0;transition:background-position .4s ease-out;mix-blend-mode:soft-light}
+.fx .sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);background-size:300% 100%;background-position:calc(50% + var(--tx) * 80%) 0;transition:background-position .4s ease-out;mix-blend-mode:soft-light}
 .hero.living .fxlayer{position:absolute;inset:0;will-change:transform;transform:translate(calc(var(--tx) * 10px),calc(var(--ty) * 8px));transition:transform .3s ease-out}
 @media (max-height:720px){.hero.living{width:min(100%,560px,calc(30vh * 1.5))}.hero.living.wide{width:min(100%,560px,calc(22vh * 1.5))}}
 
@@ -419,16 +421,7 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 @keyframes ruleIn{to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){.handwrite tspan{fill-opacity:1;stroke-dashoffset:0;animation:none}}
 
-/* ---- playlist ---- */
-.playlist{width:min(100%,520px);margin-top:1rem;background:rgba(255,255,255,.8);border:1px solid #fff;border-radius:20px;padding:.8rem .9rem .9rem;box-shadow:0 20px 40px -28px rgba(74,46,54,.35);text-align:left}
-.pl-head{display:grid;grid-template-columns:auto 1fr auto;gap:.7rem;align-items:center;margin-bottom:.7rem}
-.pl-icon{width:28px;height:28px;fill:#1DB954}
-.pl-head .caps{display:block;font-size:.5rem;color:var(--muted)}
-.pl-head strong{display:block;font-weight:400;font-size:1.05rem;line-height:1.2;margin-top:.1rem}
-.pl-open{font-family:var(--sans);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.45rem .7rem;border-radius:999px;border:1px solid var(--gold);white-space:nowrap}
-.playlist iframe{width:100%;height:152px;border:0;border-radius:12px;display:block;background:#f3e9e4}
-@media (max-height:720px){.playlist iframe{height:80px}.pg-travel .sub{display:none}}
-@media (max-height:620px){.playlist{display:none}}
+@media (max-height:720px){.pg-travel .sub{display:none}}
 
 /* ---- save my invite ---- */
 #savecard.busy{opacity:.6;pointer-events:none}
@@ -450,5 +443,5 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 /* ---- keepsake card fallback viewer (press-and-hold to save) ---- */
 .cardview{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1rem;background:rgba(40,20,30,.78);backdrop-filter:blur(6px);color:#FFF6F3;--fg:#FFF6F3;--btn:rgba(255,255,255,.12)}
 .cardview img{max-height:68vh;max-width:92vw;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);-webkit-touch-callout:default}
-.cardview p{margin:0;font-family:var(--serif);font-style:italic;font-size:1rem;opacity:.9;text-align:center}
+.cardview p{margin:0;font-style:italic;font-size:1rem;opacity:.9;text-align:center}
 .cardview .btn.solid{background:#B8933F;color:#2A1620;border-color:#B8933F}
