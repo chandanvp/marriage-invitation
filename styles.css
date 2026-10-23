@@ -145,18 +145,25 @@ body[data-state=married] .pg-end .corner.light{color:#B8933F}
 .pg-cover .art{position:absolute;right:-2%;bottom:2vh;height:min(72vh,640px);aspect-ratio:3/4;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 70% 76% at 50% 52%,#000 40%,transparent 74%);mask-image:radial-gradient(ellipse 70% 76% at 50% 52%,#000 40%,transparent 74%);opacity:.95}
 .pg-cover .art img{height:100%;width:100%;object-fit:cover;display:block}
 @media (max-width:760px){
-  .pg-cover .content{justify-content:flex-start;padding-top:max(7vh,40px);padding-bottom:0}
+  /* phone: start the column high (just below the status bar) and tighten the vertical rhythm */
+  .pg-cover .content{justify-content:flex-start;padding-top:max(3vh,18px);padding-bottom:0}
+  .pg-cover .rule{margin:.8rem auto}
+  .pg-cover .names{margin-top:.35rem}
+  .pg-cover .dear .guest.handwrite{margin-bottom:.1em}
+  .pg-cover .dear .guest-rule{margin-bottom:.4rem}
   /* phone: script.js moves the painting into the text column, where it takes whatever height is left below the
      date lines (flex:1) — so it can never overlap the text, whatever the screen height or guest-name length */
   .pg-cover .content{padding-bottom:9vh}
-  .pg-cover .content .art{position:relative;inset:auto;flex:1 1 0;min-height:0;width:100%;height:auto;aspect-ratio:auto;margin-top:1rem;opacity:.95;-webkit-mask-image:radial-gradient(ellipse 64% 72% at 50% 50%,#000 42%,rgba(0,0,0,.55) 70%,transparent 100%);mask-image:radial-gradient(ellipse 64% 72% at 50% 50%,#000 42%,rgba(0,0,0,.55) 70%,transparent 100%)}
-  .pg-cover .content .art img{height:100%;width:100%;object-fit:contain}
+  .pg-cover .content .art{position:relative;inset:auto;flex:1 1 0;min-height:0;width:100%;height:auto;aspect-ratio:auto;margin-top:.8rem;opacity:.95;overflow:hidden;-webkit-mask-image:radial-gradient(ellipse 64% 72% at 50% 50%,#000 42%,rgba(0,0,0,.55) 70%,transparent 100%);mask-image:radial-gradient(ellipse 64% 72% at 50% 50%,#000 42%,rgba(0,0,0,.55) 70%,transparent 100%)}
+  /* absolutely positioned so the height resolves against the flexed box on every engine (Safari/WebView
+     treat a percentage height inside an auto-height flex item as 'natural size', which would spill into the text) */
+  .pg-cover .content .art img{position:absolute;inset:0;height:100%;width:100%;object-fit:contain}
   .pg-cover .content .art.px{transform:translate(calc(var(--tx) * 8px),calc(var(--ty) * 8px))}
-  .pg-cover .cover-mono{width:88px;margin-bottom:.6rem}
+  .pg-cover .cover-mono{width:72px;margin-bottom:.4rem}
   .pg-cover .scrollhint{bottom:2vh;padding:.45rem .9rem;border-radius:999px;background:rgba(255,251,247,.7);backdrop-filter:blur(6px);color:#6B3F4C}
   .page .corner{width:38vw}.page .corner.br{bottom:-1%;right:-8%}.page .corner.tl{top:0;left:-8%}
 }
-@media (max-width:760px) and (max-height:700px){.pg-cover .content{padding-top:5vh;padding-bottom:8vh}.pg-cover .content .art{margin-top:.5rem}}
+@media (max-width:760px) and (max-height:700px){.pg-cover .content{padding-top:max(2vh,12px);padding-bottom:8vh}.pg-cover .content .art{margin-top:.5rem}.pg-cover .cover-mono{width:60px}}
 .cameo{width:clamp(110px,22vw,160px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 1px var(--gold),0 24px 50px -24px rgba(74,46,54,.5);margin:1rem auto 0}
 .cameo img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;transform:scale(1.35);display:block}
 .cover-mono{width:clamp(104px,16vw,150px);margin-bottom:1.1rem;filter:drop-shadow(0 6px 14px rgba(142,107,58,.25))}
