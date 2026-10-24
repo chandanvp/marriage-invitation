@@ -181,8 +181,11 @@ body[data-state=married] .pg-end .corner.light{color:#B8933F}
 .cameo img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;transform:scale(1.35);display:block}
 .cover-mono{width:clamp(104px,16vw,150px);margin-bottom:1.1rem;filter:drop-shadow(0 6px 14px rgba(142,107,58,.25))}
 .dear{font-size:clamp(1.05rem,3.3vw,1.5rem);font-style:italic;color:var(--muted)}
-.dear .dear-to{display:block;font-size:clamp(1.25rem,4.4vw,1.9rem);color:#6B3F4C;margin-bottom:.15em}
-.dear .dear-to .guest{font-family:var(--display);font-style:italic;color:#5A2F3C}
+/* one sentence, one face (Jost italic); only the guest's name is emphasised */
+.dear{font-size:clamp(.95rem,3.4vw,1.5rem)}
+.dear .dear-line{white-space:nowrap}
+.dear .dear-to{display:block;color:#6B3F4C;margin-bottom:.1em}
+.dear .dear-to .guest{font-weight:500;color:#5A2F3C}
 .dear .guest{display:inline}
 .names{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(1.75rem,6.4vw,4.2rem);line-height:1.15;white-space:nowrap;word-spacing:.08em;margin-top:.6rem;color:#5A2F3C;text-shadow:0 1px 0 rgba(255,255,255,.6)}
 .names .ini{letter-spacing:.12em}
@@ -229,15 +232,15 @@ body[data-state=married] .confetti{opacity:1}
 .person{position:relative;z-index:1}
 @media (max-width:560px){.knotmark .cameo{width:clamp(104px,30vw,130px)}}
 .person{text-align:center}
-.pname{font-family:var(--display);font-style:italic;font-size:clamp(1.4rem,4.6vw,2.4rem);line-height:1.15;color:#6B3F4C}
+.pname{font-family:var(--display);font-style:italic;font-size:clamp(1.4rem,5.2vw,2.4rem);line-height:1.15;color:#6B3F4C;white-space:nowrap}
 @media (min-width:561px){.pname{font-size:clamp(1.4rem,3vw,2.3rem)}}
 .rel{font-style:italic;color:var(--muted);margin-top:.35rem;font-size:.95rem}
-.parents{font-size:clamp(.95rem,2.8vw,1.15rem);line-height:1.45;margin-top:.15rem}
+.parents{font-size:clamp(.82rem,3.4vw,1.15rem);line-height:1.45;margin-top:.15rem;white-space:nowrap}
 .parents .ini{letter-spacing:.1em}
 .town{font-size:.56rem;margin-top:.35rem;color:var(--muted)}
 .hero.photo img{object-position:50% 40%}
 .knotmark{display:grid;place-items:center}
-.quote{font-size:clamp(1.15rem,3.6vw,1.6rem);font-style:italic;line-height:1.45;max-width:30ch;color:#5C3F49}
+.quote{font-size:clamp(.82rem,3.9vw,1.5rem);font-style:italic;line-height:1.45;white-space:nowrap;color:#5C3F49}
 @media (max-width:560px){.couple{grid-template-columns:minmax(0,1fr);gap:.5rem}.knotmark{width:100%;justify-self:center}}
 
 /* ---------------- schedule overview ---------------- */
