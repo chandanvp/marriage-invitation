@@ -225,7 +225,7 @@ body[data-state=married] .confetti{opacity:1}
 .couple{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:clamp(.8rem,3vw,2rem);align-items:start;justify-items:center;width:100%;margin-top:.9rem}
 .person{width:100%;min-width:0}
 .pg-couple .cover-mono{margin-bottom:.8rem}
-.pg-couple .content{max-width:940px}
+.pg-couple .content{max-width:1080px}
 .knotmark{align-self:center;display:grid;place-items:center;position:relative;isolation:isolate}
 .knotmark .cameo{margin:0;width:clamp(110px,14vw,160px)}
 .knotmark::before{content:'';position:absolute;width:130%;height:130%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(255,255,255,0) 70%);z-index:-1}
@@ -235,8 +235,11 @@ body[data-state=married] .confetti{opacity:1}
 .pname{font-family:var(--display);font-style:italic;font-size:clamp(1.4rem,5.2vw,2.4rem);line-height:1.15;color:#6B3F4C;white-space:nowrap}
 @media (min-width:561px){.pname{font-size:clamp(1.4rem,3vw,2.3rem)}}
 .rel{font-style:italic;color:var(--muted);margin-top:.35rem;font-size:.95rem}
-.parents{font-size:clamp(.82rem,3.4vw,1.15rem);line-height:1.45;margin-top:.15rem;white-space:nowrap}
+.parents{font-size:clamp(.82rem,3.4vw,1.15rem);line-height:1.45;margin-top:.15rem;overflow-wrap:anywhere}
+@media (max-width:560px){.parents{white-space:nowrap}} /* single column on phones: keep on one line */
+@media (min-width:561px){.parents{font-size:clamp(.9rem,1.25vw,1.05rem)}.pname{font-size:clamp(1.4rem,2.6vw,2.2rem)}}
 .parents .ini{letter-spacing:.1em}
+.parents .pn{white-space:nowrap} /* each parent's name stays whole; a wrap can only happen at the '&' */
 .town{font-size:.56rem;margin-top:.35rem;color:var(--muted)}
 .hero.photo img{object-position:50% 40%}
 .knotmark{display:grid;place-items:center}
