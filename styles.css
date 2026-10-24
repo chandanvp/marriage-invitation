@@ -451,3 +451,10 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 .cardview img{max-height:68vh;max-width:92vw;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);-webkit-touch-callout:default}
 .cardview p{margin:0;font-style:italic;font-size:1rem;opacity:.9;text-align:center}
 .cardview .btn.solid{background:#B8933F;color:#2A1620;border-color:#B8933F}
+
+/* ---- multiplane (layered-depth) paintings: a background plate + cut-out planes that shift by different
+   amounts with tilt / pointer (--tx/--ty), so the figures read as standing in front of the scene ---- */
+.hero.living.multiplane>img:not(.plane){translate:calc(var(--tx) * -6px) calc(var(--ty) * -4px);transition:translate .35s ease-out,filter 1.8s ease,transform 1.8s cubic-bezier(.2,.7,.2,1)}
+.hero.living img.plane{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;translate:calc(var(--tx) * var(--dx,0) * 1px) calc(var(--ty) * var(--dy,0) * 1px);transition:translate .35s ease-out,filter 1.8s ease,transform 1.8s cubic-bezier(.2,.7,.2,1)}
+.hero.living.multiplane .fxlayer{transform:translate(calc(var(--tx) * 24px),calc(var(--ty) * 16px))}
+@media (prefers-reduced-motion:reduce){.hero.living.multiplane>img:not(.plane),.hero.living img.plane{translate:none}}
