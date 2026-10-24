@@ -191,7 +191,7 @@ $('#share').onclick = async () => {
   // positions are % of the 3:2 frame, matched to the artwork
   const SCENES = {
     reception: { bulbs: [[36, 30], [41, 38], [46, 33], [50, 22], [55, 32], [60, 37], [66, 31], [71, 25], [33, 24], [68, 20]], lamps: [[9, 48], [12, 53], [16, 48], [67, 50], [74, 49]], stars: 18, petals: 7 },
-    muhurtam: { flames: [[16.5, 24.5], [87, 24.5]], petals: 8 },
+    muhurtam: { flames: [[21.5, 64], [82, 64]], petals: 8 },
     lunch: { bulbs: [[36, 30], [41, 36], [46, 32], [52, 24], [56, 31], [61, 36], [66, 30], [70, 25]], lamps: [[9, 46], [12, 51], [16, 46]], sparkles: 4, petals: 8 },
     venue: { sun: [12, 16], birds: 2, petals: 5 }
   };
