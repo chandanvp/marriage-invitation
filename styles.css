@@ -161,12 +161,14 @@ body[data-state=married] .pg-end .corner.light{color:#B8933F}
   .pg-cover .dear .guest-rule{margin-bottom:.4rem}
   /* phone: script.js moves the painting into the text column, where it takes whatever height is left below the
      date lines (flex:1) — so it can never overlap the text, whatever the screen height or guest-name length */
-  .pg-cover .content{padding-bottom:9vh}
+  /* the column is sized to the SMALL viewport (100svh) so it does not re-flow when the browser's address bar
+     collapses/expands while scrolling — that re-flow is what made the painting grow and shrink */
+  .pg-cover .content{padding-bottom:9vh;height:100vh;height:100svh}
   .pg-cover .content .art{position:relative;inset:auto;flex:1 1 0;min-height:0;width:100%;height:auto;aspect-ratio:auto;margin-top:.8rem;opacity:.95;overflow:hidden;-webkit-mask-image:radial-gradient(ellipse 64% 72% at 50% 50%,#000 42%,rgba(0,0,0,.55) 70%,transparent 100%);mask-image:radial-gradient(ellipse 64% 72% at 50% 50%,#000 42%,rgba(0,0,0,.55) 70%,transparent 100%)}
   /* absolutely positioned so the height resolves against the flexed box on every engine (Safari/WebView
      treat a percentage height inside an auto-height flex item as 'natural size', which would spill into the text) */
   .pg-cover .content .art img{position:absolute;inset:0;height:100%;width:100%;object-fit:contain}
-  .pg-cover .content .art.px{transform:translate(calc(var(--tx) * 8px),calc(var(--ty) * 8px))}
+  .pg-cover .content .art.px{transform:none} /* no tilt drift on phones: keep the painting dead-centre */
   .pg-cover .cover-mono{width:72px;margin-bottom:.4rem}
   /* couple page: monogram in exactly the cover's spot */
   .pg-couple .content{justify-content:flex-start;padding-top:max(3vh,18px)}
