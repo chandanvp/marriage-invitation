@@ -453,3 +453,9 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 .cardview img{max-height:68vh;max-width:92vw;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);-webkit-touch-callout:default}
 .cardview p{margin:0;font-style:italic;font-size:1rem;opacity:.9;text-align:center}
 .cardview .btn.solid{background:#B8933F;color:#2A1620;border-color:#B8933F}
+
+/* ---- phones: the garland nav stays hidden and only fades in while scrolling (and briefly after) ---- */
+@media (max-width:760px){
+  body.open #garland{opacity:0;transition:opacity .45s ease}
+  body.open #garland.show{opacity:1;transition-duration:.25s}
+}
