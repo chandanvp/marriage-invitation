@@ -138,13 +138,13 @@ body[data-state=married] .pg-end .corner.light{color:#B8933F}
 .env-under{text-align:center;animation-delay:.7s}
 .env-title{font-family:var(--display);font-style:italic;font-size:clamp(1.9rem,6.8vw,2.8rem);color:#5A2F3C;line-height:1.1}
 .env-date{font-size:clamp(.66rem,2.3vw,.85rem);letter-spacing:.2em;white-space:nowrap;margin-top:.5rem;color:#6B3F4C;font-weight:400}
-.env-hint{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.1rem;border-radius:999px;background:linear-gradient(135deg,#C9A05A,#B8933F);color:#FFF8EE;box-shadow:0 10px 26px -10px rgba(142,107,58,.7),0 0 0 4px rgba(184,147,63,.18);animation:envin 1.2s ease both .9s, hintpulse 2.2s ease-in-out infinite 2s}
-.env-hint .caps{font-size:clamp(.7rem,2.4vw,.82rem);font-weight:400;letter-spacing:.24em}
+.env-hint{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;width:min(86vw,520px);box-sizing:border-box;padding:.95rem 1.2rem;border-radius:999px;background:linear-gradient(135deg,#C9A05A,#B8933F);color:#FFF8EE;box-shadow:0 10px 26px -10px rgba(142,107,58,.7),0 0 0 4px rgba(184,147,63,.18);animation:envin 1.2s ease both .9s, hintpulse 2.2s ease-in-out infinite 2s}
+.env-hint .caps{font-size:clamp(.82rem,3vw,1rem);font-weight:400;letter-spacing:.26em}
 .env-hint-arrow{font-family:var(--sans);font-size:1rem;line-height:1;animation:hintbob 1.4s ease-in-out infinite}
 @keyframes hintbob{0%,100%{transform:translateY(1px)}50%{transform:translateY(-3px)}}
 @keyframes hintpulse{0%,100%{box-shadow:0 10px 26px -10px rgba(142,107,58,.7),0 0 0 4px rgba(184,147,63,.18)}50%{box-shadow:0 10px 26px -10px rgba(142,107,58,.7),0 0 0 10px rgba(184,147,63,0)}}
 .env.open ~ .env-hint,.env.open ~ .env-under{opacity:0;transition:opacity .3s}
-@media (max-height:700px){.env-scene{gap:.8rem}.env{width:min(80vw,460px)}.env-title{font-size:1.6rem}}
+@media (max-height:700px){.env-scene{gap:.8rem}.env{width:min(80vw,460px)}.env-hint{width:min(80vw,460px)}}
 
 /* ---------------- cover ---------------- */
 .pg-cover .content{padding-bottom:12vh}
@@ -454,5 +454,5 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 .cardview p{margin:0;font-style:italic;font-size:1rem;opacity:.9;text-align:center}
 .cardview .btn.solid{background:#B8933F;color:#2A1620;border-color:#B8933F}
 
-/* ---- phones: no garland nav at all (swipe + scroll hint are enough); desktop keeps it ---- */
-@media (max-width:760px){#garland{display:none}}
+/* ---- phones: garland nav kept, but translucent so it does not pull the eye ---- */
+@media (max-width:760px){body.open #garland{opacity:.4}}
