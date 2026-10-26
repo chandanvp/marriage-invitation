@@ -454,8 +454,5 @@ body.open #firefly{opacity:1;transition:left 2.6s cubic-bezier(.45,.05,.3,1),top
 .cardview p{margin:0;font-style:italic;font-size:1rem;opacity:.9;text-align:center}
 .cardview .btn.solid{background:#B8933F;color:#2A1620;border-color:#B8933F}
 
-/* ---- phones: the garland nav stays hidden and only fades in while scrolling (and briefly after) ---- */
-@media (max-width:760px){
-  body.open #garland{opacity:0;transition:opacity .45s ease}
-  body.open #garland.show{opacity:1;transition-duration:.25s}
-}
+/* ---- phones: no garland nav at all (swipe + scroll hint are enough); desktop keeps it ---- */
+@media (max-width:760px){#garland{display:none}}

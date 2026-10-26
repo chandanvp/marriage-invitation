@@ -96,13 +96,6 @@ pages.forEach((pg, i) => {
   b.onclick = () => pg.scrollIntoView({ behavior: 'smooth' });
   garland.appendChild(b);
 });
-/* phones: reveal the garland only while scrolling, hide 1.6 s after the last scroll (desktop keeps it visible) */
-(function garlandAutoHide() {
-  if (!matchMedia('(max-width: 760px)').matches) return;
-  let t; const show = () => { garland.classList.add('show'); clearTimeout(t); t = setTimeout(() => garland.classList.remove('show'), 1600); };
-  scroller.addEventListener('scroll', show, { passive: true });
-  garland.addEventListener('pointerdown', show, { passive: true });
-})();
 const io = new IntersectionObserver(es => {
   es.forEach(e => {
     if (!e.isIntersecting) return;
