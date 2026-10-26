@@ -179,13 +179,6 @@ let mapLoaded = false;
 function loadMap() { if (mapLoaded) return; mapLoaded = true; const f = $('#gmap'); f.src = f.dataset.src; }
 function coverWrite() { /* the cover guest name is now plain Crimson Pro italic (no self-writing animation) */ }
 
-/* ---------- share ---------- */
-$('#share').onclick = async () => {
-  const url = SITE; const data = { title: 'Ananya & Chandan — Wedding Invitation', text: 'You are invited! 3 & 4 December 2026, Davanagere.', url };
-  if (navigator.share) { try { await navigator.share(data); } catch (e) { } }
-  else { try { await navigator.clipboard.writeText(url); $('#share').textContent = 'Link copied'; setTimeout(() => $('#share').textContent = 'Share invite', 1800); } catch (e) { } }
-};
-
 /* ---------- living paintings: animated light layers over each illustration ---------- */
 (function living() {
   // positions are % of the 3:2 frame, matched to the artwork
@@ -220,79 +213,4 @@ $('#share').onclick = async () => {
   scroller.addEventListener('scroll', () => requestAnimationFrame(depth), { passive: true }); depth();
 })();
 
-/* ---------- save my invite: keepsake card (1080×1920) with the guest's name + QR ---------- */
-(function keepsake() {
-  const btn = $('#savecard'); if (!btn) return;
-  const MY_URL = SITE + (guest ? '?to=' + encodeURIComponent(guest).replace(/%20/g, '+') : '');
-  const loadQR = () => new Promise((res, rej) => { if (window.qrcode) return res(); const s = document.createElement('script'); s.src = 'qrcode.min.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
-  const loadImg = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
-  const BRANCH = 'M4 110 C 50 90 110 70 196 40 M40 96 q 10 -24 24 -16 q -10 12 -24 16 M70 86 q 4 18 20 16 q -6 -12 -20 -16 M100 74 q 10 -24 24 -16 q -10 12 -24 16 M130 64 q 4 18 20 16 q -6 -12 -20 -16 M160 52 q 10 -22 24 -14 q -10 12 -24 14';
-  function branch(ctx, x, y, rot, flip, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(flip ? -s : s, s); ctx.strokeStyle = '#B8933F'; ctx.lineWidth = 1.6; ctx.lineCap = 'round'; ctx.stroke(new Path2D(BRANCH)); ctx.fillStyle = '#B8933F'; [[58, 78, 1], [118, 58, .8], [176, 40, .65]].forEach(([bx, by, k]) => { for (let a = 0; a < 4; a++) { ctx.beginPath(); ctx.ellipse(bx + Math.cos(a * Math.PI / 2) * 7 * k, by + Math.sin(a * Math.PI / 2) * 7 * k, 5 * k, 2.6 * k, a * Math.PI / 2, 0, 7); ctx.fill(); } }); ctx.restore(); }
-  async function build() {
-    const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
-    if (document.fonts) await Promise.all(['italic 60px "Crimson Pro"', '300 110px "Cormorant Garamond"', '300 30px Jost', 'italic 300 36px Jost'].map(f => document.fonts.load(f).catch(() => { })));
-    const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#EBC4C2'); g.addColorStop(.5, '#F6E3E3'); g.addColorStop(1, '#FFF6F3'); c.fillStyle = g; c.fillRect(0, 0, W, H);
-    const rg = c.createRadialGradient(W / 2, 520, 50, W / 2, 520, 600); rg.addColorStop(0, 'rgba(255,255,255,.7)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
-    // couple illustration: sits entirely BELOW the text block, feathered on three sides
-    const IY = 1230;
-    try { const im = await loadImg('artwork/couple.jpg'); const ih = 540, iw = ih * im.width / im.height, ix = (W - iw) / 2; c.save(); c.globalAlpha = .95; c.drawImage(im, ix, IY, iw, ih); c.restore(); const fg = c.createLinearGradient(0, IY, 0, IY + 170); fg.addColorStop(0, 'rgba(248,231,231,1)'); fg.addColorStop(1, 'rgba(248,231,231,0)'); c.fillStyle = fg; c.fillRect(0, IY - 2, W, 174); const sg = c.createLinearGradient(ix - 10, 0, ix + 120, 0); sg.addColorStop(0, 'rgba(250,235,235,1)'); sg.addColorStop(1, 'rgba(250,235,235,0)'); c.fillStyle = sg; c.fillRect(0, IY, ix + 120, ih); const sg2 = c.createLinearGradient(ix + iw + 10, 0, ix + iw - 120, 0); sg2.addColorStop(0, 'rgba(252,240,240,1)'); sg2.addColorStop(1, 'rgba(252,240,240,0)'); c.fillStyle = sg2; c.fillRect(ix + iw - 120, IY, W, ih); const bgd = c.createLinearGradient(0, IY + ih - 120, 0, IY + ih); bgd.addColorStop(0, 'rgba(255,246,243,0)'); bgd.addColorStop(1, 'rgba(255,246,243,1)'); c.fillStyle = bgd; c.fillRect(0, IY + ih - 120, W, 122); } catch (e) { }
-    // gold frame
-    c.strokeStyle = 'rgba(184,147,63,.55)'; c.lineWidth = 2; c.strokeRect(54, 54, W - 108, H - 108);
-    // monogram
-    c.save(); c.translate(W / 2, 250); c.strokeStyle = '#8E6B3A'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke(); c.fillStyle = '#8E6B3A'; c.textAlign = 'center'; c.font = '300 112px "Cormorant Garamond", Georgia, serif'; c.fillText('A', -14, 28); c.font = '300 98px "Cormorant Garamond", Georgia, serif'; c.fillText('C', 23, 42); c.restore();
-    c.textAlign = 'center';
-    const caps = (txt, y, px = 26, align = 'center', x = W / 2) => { c.textAlign = align; c.font = `300 ${px}px Jost, Arial, sans-serif`; c.fillText(txt.split('').join('\u2009'), x, y); c.textAlign = 'center'; };
-    const y0 = guest ? 650 : 560;
-    c.fillStyle = '#6B3F4C'; c.font = 'italic 300 34px Jost, Arial, sans-serif'; c.fillText(guest ? 'Dear' : 'With joy in our hearts', W / 2, guest ? 392 : 400);
-    if (guest) { let px = 60; c.font = `italic ${px}px "Crimson Pro", Georgia, serif`; while (c.measureText(guest).width > 860 && px > 34) { px -= 3; c.font = `italic ${px}px "Crimson Pro", Georgia, serif`; } c.fillStyle = '#5A2F3C'; c.fillText(guest, W / 2, 492); }
-    c.fillStyle = '#8E5F69'; c.font = 'italic 300 34px Jost, Arial, sans-serif'; c.fillText('you are warmly invited to the wedding of', W / 2, guest ? 560 : 470);
-    c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Crimson Pro", Georgia, serif'; c.fillText('Ananya N Acharya', W / 2, y0); c.fillStyle = '#B8933F'; c.font = 'italic 50px "Crimson Pro", Georgia, serif'; c.fillText('&', W / 2, y0 + 70); c.fillStyle = '#5A2F3C'; c.font = 'italic 76px "Crimson Pro", Georgia, serif'; c.fillText('Chandan V P', W / 2, y0 + 152);
-    c.strokeStyle = '#B8933F'; c.lineWidth = 2; c.beginPath(); c.moveTo(W / 2 - 60, y0 + 200); c.lineTo(W / 2 + 60, y0 + 200); c.stroke();
-    c.fillStyle = '#4A2E36'; caps('03 & 04 DECEMBER 2026', y0 + 258, 30); c.fillStyle = '#8E5F69'; caps('GUNDI MAHADEVAPPA KALYANA MANDIRA · DAVANAGERE', y0 + 300, 19);
-    c.fillStyle = '#4A2E36'; c.font = 'italic 300 32px Jost, Arial, sans-serif'; c.fillText('Reception · Thu 3 Dec · 7:30 PM onwards', W / 2, y0 + 360); c.fillText('Muhurtam · Fri 4 Dec · 8:30 – 9:15 AM', W / 2, y0 + 406); c.fillText('Reception & Lunch · Fri 4 Dec · 12:30 PM onwards', W / 2, y0 + 452);
-    // QR (bottom-left, clear of the illustration) with the personalised link
-    try { await loadQR(); const q = qrcode(0, 'M'); q.addData(MY_URL); q.make(); const n = q.getModuleCount(), S = 132, m = S / n, qx = 96, qy = H - 320; c.fillStyle = 'rgba(255,251,247,.92)'; c.beginPath(); c.roundRect(qx - 14, qy - 14, S + 28, S + 28, 16); c.fill(); c.strokeStyle = 'rgba(184,147,63,.5)'; c.lineWidth = 1.5; c.stroke(); c.fillStyle = '#4A2E36'; for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) c.fillRect(qx + k * m, qy + r * m, m + .4, m + .4); c.fillStyle = '#6B3F4C'; caps('SCAN TO OPEN', qy + S + 44, 15, 'center', qx + S / 2); caps('YOUR INVITATION', qy + S + 66, 15, 'center', qx + S / 2); } catch (e) { }
-    c.fillStyle = '#8E5F69'; caps('WITH LOVE · ANANYA & CHANDAN', H - 90, 18);
-    return cv;
-  }
-  /* navigator.share() must run inside the click's user-activation window (~5 s on Chrome, less on Safari).
-     Building the card (fonts + artwork + QR lib) can take longer than that on a phone, so we pre-build the PNG
-     as soon as the farewell page approaches and keep it ready; the click then shares an already-finished file. */
-  const FNAME = 'Ananya-Chandan-wedding-invite.png', TITLE = 'Ananya & Chandan — Wedding Invitation';
-  let fileP = null;
-  const prepare = () => fileP || (fileP = build().then(cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('toBlob')), 'image/png'))).then(b => new File([b], FNAME, { type: 'image/png' })).catch(e => { fileP = null; throw e; }));
-  const farewell = btn.closest('.page');
-  if (farewell) new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { o.disconnect(); prepare().catch(() => { }); } }, { root: scroller, rootMargin: '150% 0px' }).observe(farewell);
-  btn.addEventListener('pointerdown', () => prepare().catch(() => { }), { passive: true });
-  function download(file) { const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 60000); }
-  /* fallback when the share sheet is unavailable or refused (in-app browsers, expired activation): show the card
-     so the guest can press-and-hold to save, with a plain download link as well */
-  function preview(file) {
-    const url = URL.createObjectURL(file), ov = document.createElement('div'); ov.className = 'cardview'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Your invitation card');
-    const img = document.createElement('img'); img.src = url; img.alt = 'Ananya & Chandan wedding invitation card';
-    const hint = document.createElement('p'); hint.textContent = 'Press and hold the card to save it to your photos';
-    const row = document.createElement('div'); row.className = 'btns';
-    const dl = document.createElement('a'); dl.className = 'btn solid'; dl.textContent = 'Download'; dl.href = url; dl.download = file.name; dl.rel = 'noopener';
-    const cl = document.createElement('button'); cl.className = 'btn'; cl.textContent = 'Close'; cl.onclick = () => { ov.remove(); setTimeout(() => URL.revokeObjectURL(url), 60000); };
-    row.append(dl, cl); ov.append(img, hint, row); document.body.appendChild(ov); cl.focus();
-  }
-  const touch = matchMedia('(hover: none)').matches;
-  btn.onclick = async () => {
-    btn.classList.add('busy'); const label = btn.textContent; btn.textContent = 'Preparing…';
-    try {
-      const file = await prepare();            // instant if the warm-up already finished → share stays inside the gesture
-      let done = false;
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], title: TITLE }); done = true; }
-        catch (e) { if (e && e.name === 'AbortError') done = true; /* guest dismissed the sheet — not an error */ }
-      }
-      if (!done) { if (touch) preview(file); else download(file); }
-    } catch (e) {
-      btn.textContent = 'Could not prepare — tap again'; await new Promise(r => setTimeout(r, 1800));
-    } finally { btn.classList.remove('busy'); btn.textContent = label; }
-  };
-  /* preview helpers: ?card=1 renders the keepsake card full-screen instead of the site; ?card=view opens the fallback viewer */
-  if (qs.get('card') === 'view') prepare().then(preview).catch(() => { });
-  if (qs.get('card') === '1') build().then(cv => { document.body.innerHTML = ''; document.body.style.cssText = 'background:#333;overflow:auto'; cv.style.cssText = 'display:block;margin:0 auto;max-width:100%;height:auto'; document.body.appendChild(cv); });
-})();
 })();

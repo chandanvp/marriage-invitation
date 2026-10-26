@@ -15,8 +15,8 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body data-state="pre" class="sealed">
@@ -228,12 +228,11 @@
       </svg>
     </div>
     <div class="content ev">
-      <p class="caps muted kicker rv">The venue</p>
+      <h2 class="h-ev venue-title rv">The Venue</h2>
       <figure class="hero wide living rv" data-living="venue"><img src="artwork/venue.jpg" alt="Illustration of Gundi Mahadevappa Kalyana Mandira" loading="lazy"></figure>
       <div class="card rv venue-card">
         <p class="h-ev" style="font-size:clamp(1.5rem,4.8vw,2.3rem)">Gundi Mahadevappa Kalyana Mandira</p>
         <p class="addr">Dental College Road, MCC B Block<br>Davanagere 577004, Karnataka</p>
-        <p class="vmeta"><b>Thu 3 Dec</b> · from 7:30 PM onwards</p>
         <div class="mapbox">
           <iframe id="gmap" title="Map of Gundi Mahadevappa Kalyana Mandira" data-src="https://www.google.com/maps?q=Gundi+Mahadevappa+Kalyana+Mandira,+Dental+College+Road,+MCC+B+Block,+Davanagere+577004&z=15&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
           <a class="btn solid mapbtn" href="https://maps.app.goo.gl/aswMFV4R2zvB2V8RA" target="_blank" rel="noopener">Directions</a>
@@ -286,8 +285,7 @@
       <p class="end-sub rv" id="endsub">Your presence and blessings will make our day complete</p>
       <p class="caps muted rv" style="margin-top:.8rem">3 &amp; 4 December 2026 · Davanagere</p>
       <div class="rule rv"></div>
-      <div class="btns rv"><button class="btn solid" id="savecard">Save my invite</button><button class="btn" data-cal>Save the dates</button><button class="btn" id="share">Share invite</button></div>
-      <p class="caps muted rv" id="savehint" style="font-size:.54rem;margin-top:.5rem">A keepsake card with your name — perfect for WhatsApp status</p>
+      <div class="btns rv"><button class="btn solid" data-cal>Save the dates</button></div>
       <p class="foot rv">With love · Ananya &amp; Chandan</p>
     </div>
   </section>
@@ -311,7 +309,6 @@
   </div>
 </div>
 
-<script src="qrcode.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
